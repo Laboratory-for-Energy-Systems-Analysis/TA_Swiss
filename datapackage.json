@@ -1,0 +1,216 @@
+{
+    "profile": "data-package",
+    "name": "sweet-sure-2050-switzerland",
+    "title": "Switzerland TIMES scenario integration in ecoinvent",
+    "description": "Implementation of Swiss TIMES (STEM) scenarios in ecoinvent for the SWEET SURE project.",
+    "version": "0.0.1",
+    "contributors": [
+        {
+            "title": "Romain Sacchi",
+            "email": "romain.sacchi@psi.ch"
+        },
+        {
+            "title": "Alvaro H. Menacho",
+            "email": "alvaro.hahn-menacho@psi.ch"
+        }
+    ],
+    "dependencies": {
+        "premise": ">=2.1.1"
+    },
+    "ecoinvent": {
+        "version": "3.10",
+        "system model": "cut-off"
+    },
+    "scenarios": [
+        "SPS1",
+        "SPS1_AP1_MD",
+        "SPS1_AP2_MD",
+        "SPS1_AP3_MD",
+        "SPS1_AP4_MD",
+        "SPS1_AP5_MD",
+        "SPS2",
+        "SPS2_AP1_MD",
+        "SPS2_AP2_MD",
+        "SPS2_AP3_MD",
+        "SPS2_AP4_MD",
+        "SPS2_AP5_MD",
+        "SPS4",
+        "SPS4_AP1_MD",
+        "SPS4_AP2_MD",
+        "SPS4_AP3_MD",
+        "SPS4_AP4_MD",
+        "SPS4_AP5_MD"
+    ],
+    "licenses": [
+        {
+            "id": "CC0-1.0",
+            "title": "CC0 1.0",
+            "url": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+    ],
+    "resources": [
+        {
+            "path": "scenario_data/scenario_data.csv",
+            "profile": "tabular-data-resource",
+            "name": "scenario_data",
+            "format": "csv",
+            "mediatype": "text/csv",
+            "encoding": "utf-8-sig",
+            "schema": {
+                "fields": [
+                    {
+                        "name": "model",
+                        "type": "string",
+                        "format": "default"
+                    },
+                    {
+                        "name": "scenario",
+                        "type": "string",
+                        "format": "default"
+                    },
+                    {
+                        "name": "region",
+                        "type": "string",
+                        "format": "default"
+                    },
+                    {
+                        "name": "variables",
+                        "type": "string",
+                        "format": "default"
+                    },
+                    {
+                        "name": "unit",
+                        "type": "string",
+                        "format": "default"
+                    },
+                    {
+                        "name": "2020",
+                        "type": "number",
+                        "format": "default"
+                    },
+                    {
+                        "name": "2022",
+                        "type": "number",
+                        "format": "default"
+                    },
+                    {
+                        "name": "2025",
+                        "type": "number",
+                        "format": "default"
+                    },
+                    {
+                        "name": "2030",
+                        "type": "number",
+                        "format": "default"
+                    },
+                    {
+                        "name": "2035",
+                        "type": "number",
+                        "format": "default"
+                    },
+                    {
+                        "name": "2040",
+                        "type": "number",
+                        "format": "default"
+                    },
+                    {
+                        "name": "2045",
+                        "type": "number",
+                        "format": "default"
+                    },
+                    {
+                        "name": "2050",
+                        "type": "number",
+                        "format": "default"
+                    },
+                    {
+                        "name": "2055",
+                        "type": "number",
+                        "format": "default"
+                    },
+                    {
+                        "name": "2060",
+                        "type": "number",
+                        "format": "default"
+                    },
+                    {
+                        "name": "2065",
+                        "type": "number",
+                        "format": "default"
+                    },
+                    {
+                        "name": "2070",
+                        "type": "number",
+                        "format": "default"
+                    }
+                ],
+                "missingValues": [
+                    ""
+                ]
+            }
+        },
+        {
+            "path": "configuration_file/config.yaml",
+            "profile": "data-resource",
+            "name": "config",
+            "format": "yaml",
+            "mediatype": "text/yaml",
+            "encoding": "utf-8"
+        },
+        {
+            "path": "inventories/lci-sweet_sure.xlsx",
+            "profile": "data-resource",
+            "name": "inventories",
+            "format": "csv",
+            "mediatype": "text/csv",
+            "encoding": "utf-8",
+            "schema": {
+                "fields": [
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "format": "default"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "number",
+                        "format": "default"
+                    },
+                    {
+                        "name": "database",
+                        "type": "string",
+                        "format": "default"
+                    },
+                    {
+                        "name": "location",
+                        "type": "string",
+                        "format": "default"
+                    },
+                    {
+                        "name": "categories",
+                        "type": "string",
+                        "format": "default"
+                    },
+                    {
+                        "name": "unit",
+                        "type": "string",
+                        "format": "default"
+                    },
+                    {
+                        "name": "type",
+                        "type": "string",
+                        "format": "default"
+                    },
+                    {
+                        "name": "reference product",
+                        "type": "string",
+                        "format": "default"
+                    }
+                ],
+                "missingValues": [
+                    ""
+                ]
+            }
+        }
+    ]
+}

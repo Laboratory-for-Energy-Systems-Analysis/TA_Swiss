@@ -1,0 +1,2922 @@
+# Configuration file for custom scenarios for `premise`
+# Energy Perspective Scenario 2050+
+# https://www.bfe.admin.ch/bfe/en/home/policy/energy-perspectives-2050-plus.html/
+
+---
+
+regionalize:
+  datasets:
+    - name: carbon dioxide, captured at wood burning power plant 20 MW post, pipeline 200km, storage 1000m
+      reference product: carbon dioxide, captured at wood burning power plant 20 MW post, pipeline 200km, storage 1000m
+      exists in original database: True
+    - name: carbon dioxide, captured at hydrogen production plant, pre, pipeline 200km, storage 1000m
+      reference product: carbon dioxide, captured at hydrogen production plant, pre, pipeline 200km, storage 1000m
+      exists in original database: True
+    - name: carbon dioxide, captured and stored, with a sorbent-based direct air capture system, 100ktCO2, with heat pump heat, and grid electricity
+      reference product: carbon dioxide, captured
+      exists in original database: True
+    - name: biomethane production, from biogas upgrading, using amine scrubbing
+      reference product: biomethane, from biogas upgrading, using amine scrubbing
+      exists in original database: True
+    - name: heat and power co-generation, natural gas, conventional power plant, 100MW electrical
+      reference product: electricity, high voltage
+      exists in original database: True
+    - name: electricity production, at co-generation wood-fired power plant, post, pipeline 200km, storage 1000m
+      reference product: electricity, high voltage
+      exists in original database: True
+    - name: hydrogen production, gaseous, 30 bar, from PEM electrolysis, from grid electricity
+      reference product: hydrogen, gaseous, 30 bar
+      exists in original database: True
+    - name: hydrogen production, steam methane reforming
+      reference product: hydrogen, gaseous, low pressure
+      exists in original database: True
+    - name: hydrogen production, steam methane reforming, with CCS
+      reference product: hydrogen, gaseous, low pressure
+      exists in original database: True
+    - name: hydrogen production, steam methane reforming, from biomethane
+      reference product: hydrogen, gaseous, low pressure
+      exists in original database: True
+    - name: hydrogen production, steam methane reforming, from biomethane, with CCS
+      reference product: hydrogen, gaseous, low pressure
+      exists in original database: True
+    - name: carbon monoxide, from RWGS, for Fischer Tropsch process, hydrogen from wood gasification, with CCS
+      reference product: carbon monoxide, from RWGS
+      exists in original database: True
+    - name: carbon monoxide, from RWGS, for Fischer Tropsch process, hydrogen from electrolysis
+      reference product: carbon monoxide, from RWGS
+      exists in original database: True
+    - name: carbon dioxide, captured and stored, with a sorbent-based direct air capture system, 100ktCO2
+      reference product: carbon dioxide, captured
+      exists in original database: True
+    - name: syngas, RWGS, Production, for Fischer Tropsch process, hydrogen from wood gasification, with CCS
+      reference product: syngas, RWGS, Production
+      exists in original database: True
+    - name: syngas, RWGS, Production, for Fischer Tropsch process, hydrogen from electrolysis
+      reference product: syngas, RWGS, Production, for Fischer Tropsch process, hydrogen from electrolysis
+      exists in original database: True
+    - name: heat production, at hard coal industrial furnace 1-10MW
+      reference product: heat, district or industrial, other than natural gas
+      exists in original database: True
+    - name: heat production, at co-generation wood-fired power plant, post, pipeline 200km, storage 1000m
+      reference product: heat, district or industrial, other than natural gas
+      exists in original database: True
+    - name: heat and power co-generation, oil
+      reference product: heat, district or industrial, other than natural gas
+      exists in original database: True
+    - name: heat production, hard coal briquette, stove 5-15kW
+      reference product: heat, central or small-scale, other than natural gas
+      exists in original database: True
+    - name: heat production, light fuel oil, at boiler 10kW condensing, non-modulating
+      reference product: heat, central or small-scale, other than natural gas
+      exists in original database: True
+    - name: heat production, natural gas, at boiler condensing modulating <100kW
+      reference product: heat, central or small-scale, natural gas
+      exists in original database: True
+    - name: heat production, light fuel oil, at industrial furnace 1MW
+      reference product: heat, district or industrial, other than natural gas
+      exists in original database: True
+    - name: heat production, natural gas, at boiler condensing modulating >100kW
+      reference product: heat, district or industrial, natural gas
+      exists in original database: True
+    - name: heat, from on-site industrial fuel cell CHP
+      reference product: heat
+      exists in original database: True
+    - name: heat and power co-generation, natural gas, 1MW electrical, lean burn
+      reference product: heat, district or industrial, natural gas
+      exists in original database: True
+
+production pathways:
+  hydro_run_of_river:
+    production volume:
+      variable: Electricity generation|Hydro|Hydro Run of River
+    ecoinvent alias:
+      name: electricity production, hydro, run-of-river
+      reference product: electricity, high voltage
+      mask: renewable energy products
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Hydro|Hydro Run of River
+ 
+  hydro (reservoir):
+    production volume:
+      variable: Electricity generation|Hydro|Hydro Large
+    ecoinvent alias:
+      name: electricity production, hydro, reservoir, alpine region
+      reference product: electricity, high voltage
+      exists in original database: True
+      mask: renewable energy products
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Hydro|Hydro Large
+
+  hydro (pumped storage):
+    production volume:
+      variable: Electricity generation|Hydro|Pump storage
+    ecoinvent alias:
+      name: electricity production, hydro, pumped storage
+      reference product: electricity, high voltage
+      exists in original database: True
+      mask: renewable energy products
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Hydro|Pump storage
+
+  # originally, the scenario does not differentiate between nuclear technologies
+  # we sub-split the volumes between Pressure And Water
+  # to match current Swiss statistics
+  nuclear (boiling water):
+    production volume:
+      variable: Electricity generation|Nuclear fuel|Boiling water
+    ecoinvent alias:
+      name: electricity production, nuclear, boiling water reactor
+      reference product: electricity, high voltage
+      exists in original database: True
+
+  nuclear (pressure water):
+    production volume:
+      variable: Electricity generation|Nuclear fuel|Pressure water
+    ecoinvent alias:
+      name: electricity production, nuclear, pressure water reactor
+      reference product: electricity, high voltage
+      exists in original database: True
+      mask: heavy water moderated
+
+  gas (CCGT):
+    production volume:
+      variable: Electricity generation|Gas|Gas turbines combined cycle
+    ecoinvent alias:
+      name: electricity production, natural gas, combined cycle power plant
+      reference product: electricity, high voltage
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Gas|Gas turbines combined cycle
+        absolute: True
+
+  gas (OCGT):
+    production volume:
+      variable: Electricity generation|Gas|Gas turbines open cycle
+    ecoinvent alias:
+      name: electricity production, natural gas, 10MW
+      reference product: electricity, high voltage
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Gas|Gas turbines open cycle
+        absolute: True
+
+  gas (CCGT CCS):
+    production volume:
+      variable: Electricity generation|Gas|Gas turbines combined cycle CCS
+    ecoinvent alias:
+      name: electricity production, at natural gas-fired combined cycle power plant, post, pipeline 200km, storage 1000m
+      reference product: electricity, high voltage
+      exists in original database: True
+      regionalize: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Gas|Gas turbines combined cycle CCS
+        absolute: True
+
+  gas (CHP DH):
+    production volume:
+      variable: Electricity generation|Gas|CHP Gas (for District Heating)
+    ecoinvent alias:
+      name: heat and power co-generation, natural gas, 1MW electrical, lean burn
+      reference product: electricity, high voltage
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Gas|CHP Gas (for District Heating)
+        absolute: True
+
+  gas (fuel cell DH):
+    production volume:
+      variable: Electricity generation|Gas|CHP Fuel Cell Gas (for District Heating)
+    ecoinvent alias:
+      name: heat and power co-generation, natural gas, 1MW electrical, lean burn
+      reference product: electricity, high voltage
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Gas|CHP Fuel Cell Gas (for District Heating)
+        absolute: True
+
+  gas (CHP industry):
+    production volume:
+      variable: Electricity generation|Gas|Industrial CHPs gas
+    ecoinvent alias:
+      name: heat and power co-generation, natural gas, 1MW electrical, lean burn
+      reference product: electricity, high voltage
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Gas|Industrial CHPs gas
+        absolute: True
+
+  gas (CHP CCS industry):
+    production volume:
+        variable: Electricity generation|Gas|Industrial CHPs gas (CCS)
+    ecoinvent alias:
+      name: electricity production, at co-generation natural gas-fired power plant, post, pipeline 200km, storage 1000m
+      reference product: electricity, high voltage
+      exists in original database: True
+      regionalize: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Gas|Industrial CHPs gas (CCS)
+        absolute: True
+
+  gas (CHP fuel cell reformer):
+    production volume:
+      variable: Electricity generation|Gas|Industrial CHPs fuel cells (gas reformer)
+    ecoinvent alias:
+      name: heat and power co-generation, natural gas, 1MW electrical, lean burn
+      reference product: electricity, high voltage
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Gas|Industrial CHPs fuel cells (gas reformer)
+        absolute: True
+
+  gas (CHP single family):
+    production volume:
+      variable: Electricity generation|Gas|Residential single family CHPs gas
+    ecoinvent alias:
+      name: heat and power co-generation, natural gas, 160kW electrical, Jakobsberg
+      reference product: electricity, low voltage
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Gas|Residential single family CHPs gas
+        absolute: True
+
+  gas (single family CHP fuel cell):
+    production volume:
+      variable: Electricity generation|Gas|Residential single family CHPs fuel cells gas
+    ecoinvent alias:
+      name: heat and power co-generation, natural gas, 160kW electrical, Jakobsberg
+      reference product: electricity, low voltage
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Gas|Residential single family CHPs fuel cells gas
+        absolute: True
+
+  gas (multi family CHP):
+    production volume:
+      variable: Electricity generation|Gas|Residential multi family CHPs gas
+    ecoinvent alias:
+      name: heat and power co-generation, natural gas, 160kW electrical, Jakobsberg
+      reference product: electricity, low voltage
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Gas|Residential multi family CHPs gas
+        absolute: True
+
+  gas (multi family CHP fuel cell):
+    production volume:
+      variable: Electricity generation|Gas|Residential multi family CHPs fuel cells gas
+    ecoinvent alias:
+      name: heat and power co-generation, natural gas, 160kW electrical, Jakobsberg
+      reference product: electricity, low voltage
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Gas|Residential multi family CHPs fuel cells gas
+        absolute: True
+
+  biogas (services CHP):
+    production volume:
+      variable: Electricity generation|Gas|Services sectors CHPs (bio)gas
+    ecoinvent alias:
+      name: heat and power co-generation, biogas, gas engine
+      reference product: electricity, high voltage
+      exists in original database: True
+      mask: renewable energy products
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Gas|Services sectors CHPs (bio)gas
+        absolute: True
+
+  gas (services CHP):
+    production volume:
+      variable: Electricity generation|Gas|Services sectors CHPs gas
+    ecoinvent alias:
+      name: heat and power co-generation, natural gas, 160kW electrical, Jakobsberg
+      reference product: electricity, low voltage
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Gas|Services sectors CHPs gas
+        absolute: True
+
+  gas (services CHP fuel cell):
+    production volume:
+      variable: Electricity generation|Gas|Fossil gases|Services sectors CHPs fuel cells (gas reformer)
+    ecoinvent alias:
+      name: heat and power co-generation, natural gas, 160kW electrical, Jakobsberg
+      reference product: electricity, low voltage
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Gas|Services sectors CHPs fuel cells (gas reformer)
+        absolute: True
+
+  waste incineration, fossil (CHP):
+    production volume:
+      variable: Electricity generation|Wastes|Non Renewable|CHP Wastes (for District Heating)
+    ecoinvent alias:
+      name: electricity production, from incineration of plastic waste mixture, energy allocation
+      reference product: electricity, from incineration of plastic waste mixture, energy allocation
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Wastes|CHP Wastes (for District Heating)
+        absolute: True
+
+  waste incineration, fossil (industrial):
+    production volume:
+      variable: Electricity generation|Wastes|Non Renewable|Industrial CHPs wastes
+    ecoinvent alias:
+      name: electricity production, from incineration of plastic waste mixture, energy allocation
+      reference product: electricity, from incineration of plastic waste mixture, energy allocation
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Wastes|Industrial CHPs wastes
+        absolute: True
+
+  # electricity from waste incineration
+  waste incineration, fossil (CHP, CCS):
+    production volume:
+      variable: Electricity generation|Wastes|Non Renewable|CHP Wastes (for District Heating) CCS
+    ecoinvent alias:
+      name: electricity production, at co-generation plastic waste-fired power plant, post, pipeline 200km, storage 1000m
+      reference product: electricity, from plastic waste mixture, municipal incineration, energy allocation
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Wastes|Wastes Incineration (electric only)
+        absolute: True
+
+  waste incineration, fossil (industrial, CCS):
+    production volume:
+      variable: Electricity generation|Wastes|Non Renewable|Industrial CHPs wastes CCS
+    ecoinvent alias:
+      name: electricity production, at co-generation plastic waste-fired power plant, post, pipeline 200km, storage 1000m
+      reference product: electricity, from plastic waste mixture, municipal incineration, energy allocation
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Wastes|Industrial CHPs wastes
+        absolute: True
+
+  waste incineration, non-fossil (CHP):
+    production volume:
+      variable: Electricity generation|Wastes|Renewable|CHP Wastes (for District Heating)
+    ecoinvent alias:
+      name: electricity production, from biowaste, municipal incineration, energy allocation
+      reference product: electricity, from biowaste, municipal incineration, energy allocation
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Wastes|CHP Wastes (for District Heating)
+        absolute: True
+
+  waste incineration, non-fossil (industrial):
+    production volume:
+      variable: Electricity generation|Wastes|Renewable|Industrial CHPs wastes
+    ecoinvent alias:
+      name: electricity production, from biowaste, municipal incineration, energy allocation
+      reference product: electricity, from biowaste, municipal incineration, energy allocation
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Wastes|Industrial CHPs wastes
+        absolute: True
+
+  waste incineration, non-fossil (CHP, CCS):
+    production volume:
+      variable: Electricity generation|Wastes|Renewable|CHP Wastes (for District Heating) CCS
+    ecoinvent alias:
+      name: electricity production, at co-generation biowaste-fired power plant, post, pipeline 200km, storage 1000m
+      reference product: electricity, from biowaste, municipal incineration, energy allocation
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Wastes|CHP Wastes (for District Heating)
+        absolute: True
+
+  waste incineration, non-fossil (industrial, CCS):
+    production volume:
+      variable: Electricity generation|Wastes|Renewable|Industrial CHPs wastes CCS
+    ecoinvent alias:
+      name: electricity production, at co-generation biowaste-fired power plant, post, pipeline 200km, storage 1000m
+      reference product: electricity, from biowaste, municipal incineration, energy allocation
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Wastes|Industrial CHPs wastes
+        absolute: True
+
+  pv (large scale):
+    production volume:
+      variable: Electricity generation|Solar|Solar PV (large scale)
+    ecoinvent alias:
+      name: electricity production, from photovoltaic panels
+      reference product: electricity, low voltage
+      exists in original database: True
+      mask: renewable energy products
+
+  pv (industry):
+    production volume:
+      variable: Electricity generation|Solar|Solar PV (Industry)
+    ecoinvent alias:
+      name: electricity production, from photovoltaic panels
+      reference product: electricity, low voltage
+      exists in original database: True
+      mask: renewable energy products
+
+  pv (services):
+    production volume:
+      variable: Electricity generation|Solar|Solar PV (Services)
+    ecoinvent alias:
+      name: electricity production, from photovoltaic panels
+      reference product: electricity, low voltage
+      exists in original database: True
+      mask: renewable energy products
+
+  pv residential (multi family):
+    production volume:
+      variable: Electricity generation|Solar|Solar PV (Residential multi family)
+    ecoinvent alias:
+      name: electricity production, from photovoltaic panels
+      reference product: electricity, low voltage
+      exists in original database: True
+      mask: renewable energy products
+
+  pv residential (single family):
+    production volume:
+      variable: Electricity generation|Solar|Solar PV (Residential single family)
+    ecoinvent alias:
+      name: electricity production, from photovoltaic panels
+      reference product: electricity, low voltage
+      exists in original database: True
+      mask: renewable energy products
+
+  wind:
+    production volume:
+      variable: Electricity generation|Wind|Wind turbines
+    ecoinvent alias:
+      name: electricity production, wind
+      reference product: electricity, high voltage
+      exists in original database: False
+      mask: renewable energy products
+
+  geothermal:
+    production volume:
+      variable: Electricity generation|Geothermal|Deep geothermal
+    ecoinvent alias:
+      name: electricity production, deep geothermal
+      reference product: electricity, high voltage
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Geothermal|Deep geothermal
+
+  hydrogen fuel cell (DH CHP):
+    production volume:
+      variable: Electricity generation|Hydrogen|CHP Fuel Cell Hydrogen (for District Heating)
+    ecoinvent alias:
+      name: electricity production, from hydrogen fuel cell
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  hydrogen fuel cell (industrial CHP):
+    production volume:
+      variable: Electricity generation|Hydrogen|Industrial CHPs fuel cells (hydrogen)
+    ecoinvent alias:
+      name: electricity production, from hydrogen fuel cell
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  hydrogen fuel cell (services CHP):
+    production volume:
+      variable: Electricity generation|Hydrogen|Services sectors CHPs fuel cells (hydrogen)
+    ecoinvent alias:
+      name: electricity production, from hydrogen fuel cell
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  biomass (DH):
+    production volume:
+      variable: Electricity generation|Wood|CHP Wood (for District Heating)
+    ecoinvent alias:
+      name: heat and power co-generation, wood chips, 6667 kW, state-of-the-art 2014
+      reference product: electricity, high voltage
+      exists in original database: True
+      mask: renewable energy products
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Wood|CHP Wood (for District Heating)
+        absolute: True
+
+  biomass (CHP):
+    production volume:
+      variable: Electricity generation|Wood|Industrial CHPs wood
+    ecoinvent alias:
+      name: heat and power co-generation, wood chips, 2000 kW, state-of-the-art 2014
+      reference product: electricity, high voltage
+      exists in original database: True
+      mask: renewable energy products
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Wood|Industrial CHPs wood
+        absolute: True
+
+  biomass (CCS, BECCS):
+    production volume:
+      variable: Electricity generation|Wood|Biomass with CCS (BECCS)
+    ecoinvent alias:
+      name: electricity production, at biomass-fired IGCC power plant, pre, pipeline 200km, storage 1000m
+      reference product: electricity, high voltage
+      exists in original database: True
+      regionalize: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Wood|Biomass with CCS (BECCS)
+        absolute: True
+
+  biomass (CCS, industrial):
+    production volume:
+      variable: Electricity generation|Wood|Industrial CHPs wood (CCS)
+    ecoinvent alias:
+      name: electricity production, at co-generation wood-fired power plant, post, pipeline 200km, storage 1000m
+      reference product: electricity, high voltage
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Wood|Industrial CHPs wood (CCS)
+        absolute: True
+
+  battery (large):
+    production volume:
+      variable: Electricity generation|Electricity storage (non hydro)|Battery storage large size centralised
+    ecoinvent alias:
+      name: electricity supply, from stationary battery (CONT scenario)
+      reference product: electricity, low voltage
+      exists in original database: True
+      regionalize: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Electricity storage (non hydro)|Battery storage large size centralised
+
+  battery (medium):
+    production volume:
+      variable: Electricity generation|Electricity storage (non hydro)|Battery storage medium size centralised
+    ecoinvent alias:
+      name: electricity supply, from stationary battery (CONT scenario)
+      reference product: electricity, low voltage
+      exists in original database: True
+      regionalize: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Electricity storage (non hydro)|Battery storage medium size centralised
+
+  battery (industry):
+    production volume:
+      variable: Electricity generation|Electricity storage (non hydro)|Batteries in industry
+    ecoinvent alias:
+      name: electricity supply, from stationary battery (CONT scenario)
+      reference product: electricity, low voltage
+      exists in original database: True
+      regionalize: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Electricity storage (non hydro)|Batteries in industry
+
+  battery (services):
+    production volume:
+      variable: Electricity generation|Electricity storage (non hydro)|Batteries in Services sector
+    ecoinvent alias:
+      name: electricity supply, from stationary battery (CONT scenario)
+      reference product: electricity, low voltage
+      exists in original database: True
+      regionalize: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Electricity storage (non hydro)|Batteries in Services sector
+
+  battery (single family):
+    production volume:
+      variable: Electricity generation|Electricity storage (non hydro)|Batteries in residential single family houses
+    ecoinvent alias:
+      name: electricity supply, from stationary battery (CONT scenario)
+      reference product: electricity, low voltage
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Electricity storage (non hydro)|Batteries in residential single family houses
+
+  battery (multi family):
+    production volume:
+      variable: Electricity generation|Electricity storage (non hydro)|Batteries in residential multi-family houses
+    ecoinvent alias:
+      name: electricity supply, from stationary battery (CONT scenario)
+      reference product: electricity, low voltage
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Electricity storage (non hydro)|Batteries in residential multi-family houses
+
+  CAES:
+    production volume:
+      variable: Electricity generation|Electricity storage (non hydro)|CAES
+    ecoinvent alias:
+      name: electricity production, compressed air energy storage
+      reference product: electricity, high voltage
+      exists in original database: True
+      regionalize: True
+      mask: adiabatic
+    efficiency:
+      - variable: Efficiency of power plants (electric)|Electricity storage (non hydro)|CAES
+
+  import:
+    production volume:
+      variable: Imports|Electricity
+    ecoinvent alias:
+      name: electricity import, from neighboring countries
+      reference product: electricity, high voltage
+      exists in original database: True
+
+  medium_to_high:
+    production volume:
+      variable: Production|Electricity|Medium to high
+    ecoinvent alias:
+      name: market for electricity, high voltage (SPS)
+      reference product: electricity, high voltage
+      exists in original database: False
+      new dataset: True
+
+  low_to_medium:
+    production volume:
+      variable: Production|Electricity|Low to medium
+    ecoinvent alias:
+      name: market for electricity, medium voltage (SPS)
+      reference product: electricity, medium voltage
+      exists in original database: False
+      new dataset: True
+
+  biogas, fermentation, sewage sludge (domestic):
+    production volume:
+      variable: Domestic biogas production|Manure|Fermentation
+    ecoinvent alias:
+      name: treatment of sewage sludge by anaerobic digestion
+      reference product: biogas
+      exists in original database: True
+
+  biogas, fermentation, biomass (domestic):
+    production volume:
+      variable: Domestic biogas production|Wastes|Renewable
+    ecoinvent alias:
+      name: treatment of biowaste by anaerobic digestion
+      reference product: biogas
+      exists in original database: True
+
+
+  natural gas (import):
+    production volume:
+      variable: Imports|Gas|Fossil gases|Natural gas
+    ecoinvent alias:
+      name: natural gas, high pressure, import from DE
+      reference product: natural gas, high pressure
+      exists in original database: True
+
+  lng (import):
+    production volume:
+      variable: Imports|Gas|Fossil gases|Liquified Natural Gas
+    ecoinvent alias:
+      name: market for natural gas, liquefied
+      reference product: natural gas, liquefied
+      exists in original database: True
+
+  synthetic natural gas (import):
+    production volume:
+      variable: Imports|Gas|Synthetic gases|PtG|PtG gas
+    ecoinvent alias:
+      name: synthetic natural gas import, from neighboring countries
+      reference product: natural gas, synthetic
+      exists in original database: True
+      ratio: 0.717
+
+  biomethane (import):
+    production volume:
+      variable: Imports|Gas|Synthetic gases|Biogases|Biogas
+    ecoinvent alias:
+      name: biomethane import, from neighboring countries
+      reference product: biomethane, high pressure
+      exists in original database: True
+      mask: vehicle grade
+
+  biomethane (domestic):
+    production volume:
+      variable: Domestic biogas production
+    ecoinvent alias:
+      name: market for biomethane, high pressure
+      reference product: biomethane, high pressure
+      exists in original database: True
+      mask: vehicle grade
+
+  synthetic natural gas (domestic):
+    production volume:
+      variable: Domestic PtG and PtL production|PtG|PtG gas
+    ecoinvent alias:
+      name: methane, from electrochemical methanation, with carbon from atmosphere, using heat pump heat
+      reference product: methane, from electrochemical methanation
+      exists in original database: True
+      regionalize: True
+      ratio: 0.717
+
+  oil (peak devices):
+    production volume:
+      variable: Electricity generation|Oil|Peak devices
+    ecoinvent alias:
+      name: electricity production, oil
+      reference product: electricity, high voltage
+      exists in original database: True
+      regionalize: True
+      mask: aluminium industry
+
+  oil (DH CHP):
+    production volume:
+      variable: Electricity generation|Oil|CHP Oil (for District Heating)
+    ecoinvent alias:
+      name: heat and power co-generation, oil
+      reference product: electricity, high voltage
+      exists in original database: True
+      regionalize: True
+      mask: aluminium industry
+
+  oil (industry CHP):
+    production volume:
+      variable: Electricity generation|Oil|Industrial CHPs oil
+    ecoinvent alias:
+      name: heat and power co-generation, oil
+      reference product: electricity, high voltage
+      exists in original database: True
+      mask: aluminium industry
+
+  light_fuel_oil:
+    production volume:
+      variable: Imports|Oil|Fossil liquids|Light fuel oil
+    ecoinvent alias:
+      name: light fuel oil, import from Europe without Switzerland
+      reference product: light fuel oil
+      exists in original database: True
+
+
+  heavy fuel oil:
+    production volume:
+      variable: Imports|Oil|Fossil liquids|Heavy fuel oil
+    ecoinvent alias:
+      name: petroleum refinery operation
+      reference product: heavy fuel oil
+      exists in original database: True
+      mask: heavy fuel oil production
+
+  wood (waste):
+    production volume:
+      variable: Primary Energy Consumption|Wood|Waste wood
+    ecoinvent alias:
+      name: market for forest residue
+      reference product: forest residue
+      exists in original database: True
+
+  wood (residues):
+    production volume:
+      variable: Primary Energy Consumption|Wood|Wood residues
+    ecoinvent alias:
+      name: market for forest residue
+      reference product: forest residue
+      exists in original database: True
+
+  wood (landscape maintenance):
+    production volume:
+      variable: Primary Energy Consumption|Wood|Wood from landscape maintenance
+    ecoinvent alias:
+      name: market for forest residue
+      reference product: forest residue
+      exists in original database: True
+
+  wood (forest):
+    production volume:
+      variable: Primary Energy Consumption|Wood|Wood from Forest (hard wood)
+    ecoinvent alias:
+      name: market for wood chips, wet, measured as dry mass
+      reference product: wood chips, wet, measured as dry mass
+      exists in original database: True
+
+  biodiesel, wood, FT (domestic):
+    production volume:
+      variable: Domestic biodiesel production|Wood|Fischer Tropsch
+    ecoinvent alias:
+      name: diesel production, synthetic, Fischer Tropsch process, hydrogen from wood gasification, energy allocation
+      reference product: diesel, synthetic
+      exists in original database: True
+      regionalize: True
+
+  biodiesel, wood, FT w CCS (domestic):
+    production volume:
+      variable: Domestic biodiesel production|Wood|Fischer Tropsch CCS
+    ecoinvent alias:
+      name: diesel production, synthetic, Fischer Tropsch process, hydrogen from wood gasification, with CCS, energy allocation
+      reference product: diesel, synthetic
+      exists in original database: True
+      regionalize: True
+
+  biodiesel (import):
+    production volume:
+      variable: Imports|Oil|Synthetic liquids|Bioliquids|Biodiesel
+    ecoinvent alias:
+      name: biodiesel production, via transesterification, from used cooking oil, energy allocation
+      reference product: biodiesel, from cooking oil
+      exists in original database: True
+
+  synthetic diesel (domestic):
+    production volume:
+      variable: Domestic PtG and PtL production|PtL|PtL Diesel
+    ecoinvent alias:
+      name: diesel production, synthetic, Fischer Tropsch process, hydrogen from electrolysis, energy allocation
+      reference product: diesel, synthetic
+      exists in original database: True
+      regionalize: True
+
+  synthetic diesel (import):
+    production volume:
+      variable: Imports|Oil|Synthetic liquids|PtL|PtL Diesel
+    ecoinvent alias:
+      name: synthetic diesel import, from neighboring countries
+      reference product: diesel, synthetic
+      exists in original database: True
+
+  fossil diesel (import):
+    production volume:
+      variable: Imports|Oil|Fossil liquids|Motor Diesel
+    ecoinvent alias:
+      name: diesel import, from neighboring countries
+      reference product: diesel
+      exists in original database: True
+      mask: synthetic
+
+  fossil gasoline (import):
+    production volume:
+      variable: Imports|Oil|Fossil liquids|Motor Gasoline
+    ecoinvent alias:
+      name: petrol, low-sulfur, import from Europe without Switzerland
+      reference product: petrol, low-sulfur
+      exists in original database: True
+
+  bioethanol (import):
+    production volume:
+      variable: Imports|Oil|Synthetic liquids|Bioliquids|Ethanol
+    ecoinvent alias:
+      name: ethanol production from wood
+      reference product: ethanol, without water, in 95% solution state, from fermentation
+      exists in original database: True
+      ratio: 1.6
+  
+  synthetic gasoline (import):
+    production volume:
+      variable: Imports|Oil|Synthetic liquids|PtL|PtL Gasoline
+    ecoinvent alias:
+      name: gasoline production, from methanol, hydrogen from electrolysis, CO2 from DAC, energy allocation
+      reference product: gasoline, synthetic
+      exists in original database: True
+
+  bioethanol (domestic):
+    production volume:
+      variable: Domestic ethanol production|Wood|Ethanol reactor
+    ecoinvent alias:
+      name: ethanol production from wood
+      reference product: ethanol, without water, in 95% solution state, from fermentation
+      exists in original database: True
+      ratio: 1.6
+
+  bioethanol, w CCS (domestic):
+    production volume:
+      variable: Domestic ethanol production|Wood|Ethanol reactor with CCS
+    ecoinvent alias:
+      name: ethanol production, via fermentation, from sugarbeet, with carbon capture and storage, energy allocation
+      reference product: ethanol, from sugarbeet
+      exists in original database: True
+      regionalize: True
+      ratio: 1.6
+
+  kerosene (import):
+    production volume:
+      variable: Imports|Oil|Fossil liquids|Kerosene (excl. international aviation)
+    ecoinvent alias:
+      name: kerosene import, from neighboring countries
+      reference product: kerosene
+      exists in original database: True
+      mask: synthetic
+
+  synthetic kerosene (import):
+    production volume:
+      variable: Imports|Oil|Synthetic liquids|PtL|PtL Kerosene
+    ecoinvent alias:
+      name: synthetic kerosene import, from neighboring countries
+      reference product: kerosene, synthetic
+      exists in original database: True
+
+  synthetic kerosene (domestic):
+    production volume:
+      variable: Domestic PtG and PtL production|PtL|PtL Kerosene
+    ecoinvent alias:
+      name: kerosene production, synthetic, Fischer Tropsch process, hydrogen from electrolysis, energy allocation
+      reference product: kerosene, synthetic
+      exists in original database: True
+      regionalize: True
+
+  hydrogen (import):
+    production volume:
+      variable: Imports|Hydrogen
+    ecoinvent alias:
+      name: market for hydrogen, gaseous, low pressure
+      reference product: hydrogen, gaseous, low pressure
+      exists in original database: True
+      mask: period
+
+  hydrogen, PEM, small (domestic):
+    production volume:
+      variable: Domestic hydrogen production|Electricity|PEM electrolysis small-medium scale
+    ecoinvent alias:
+      name: hydrogen production, gaseous, 30 bar, from PEM electrolysis, from grid electricity
+      reference product: hydrogen, gaseous, 30 bar
+      exists in original database: True
+      regionalize: True
+
+  hydrogen, PEM, large (domestic):
+    production volume:
+      variable: Domestic hydrogen production|Electricity|PEM electrolysis large scale
+    ecoinvent alias:
+      name: hydrogen production, gaseous, 30 bar, from PEM electrolysis, from grid electricity
+      reference product: hydrogen, gaseous, 30 bar
+      exists in original database: True
+      regionalize: True
+
+  hydrogen, SOEC, large (domestic):
+    production volume:
+      variable: Domestic hydrogen production|Electricity|SOEC electrolysis
+    ecoinvent alias:
+      name: hydrogen production, gaseous, 1 bar, from SOEC electrolysis, from grid electricity
+      reference product: hydrogen, gaseous, 1 bar
+      exists in original database: True
+      regionalize: True
+
+  hydrogen, SMR, natural gas (domestic):
+    production volume:
+      variable: Domestic hydrogen production|Gas|Fossil gases|SMR-ATR Reforming
+    ecoinvent alias:
+      name: hydrogen production, steam methane reforming
+      reference product: hydrogen, gaseous, low pressure
+      exists in original database: True
+      mask: CCS
+
+  hydrogen, SMR w CCS, natural gas (domestic):
+    production volume:
+      variable: Domestic hydrogen production|Gas|Fossil gases|SMR-ATR Reforming CCS
+    ecoinvent alias:
+      name: hydrogen production, steam methane reforming, with CCS
+      reference product: hydrogen, gaseous, low pressure
+      exists in original database: True
+
+  hydrogen, SMR, biomethane (domestic):
+    production volume:
+      variable: Domestic hydrogen production|Gas|Synthetic gases|SMR-ATR Reforming
+    ecoinvent alias:
+      name: hydrogen production, steam methane reforming, from biomethane
+      reference product: hydrogen, gaseous, low pressure
+      exists in original database: True
+      mask: CCS
+
+  hydrogen, SMR w CCS, biomethane (domestic):
+    production volume:
+      variable: Domestic hydrogen production|Gas|Synthetic gases|SMR-ATR Reforming CCS
+    ecoinvent alias:
+      name: hydrogen production, steam methane reforming, from biomethane, with CCS
+      reference product: hydrogen, gaseous, low pressure
+      exists in original database: True
+
+  hydrogen, wood gasification (domestic):
+    production volume:
+      variable: Domestic hydrogen production|Wood|Gasification
+    ecoinvent alias:
+      name: hydrogen production, gaseous, 25 bar, from gasification of woody biomass in entrained flow gasifier, at gasification plant
+      reference product: hydrogen, gaseous, 25 bar
+      exists in original database: True
+      regionalize: True
+
+  hydrogen, wood gasification w CCS (domestic):
+    production volume:
+      variable: Domestic hydrogen production|Wood|Gasification CCS
+    ecoinvent alias:
+      name: hydrogen production, gaseous, 25 bar, from gasification of woody biomass in entrained flow gasifier, with CCS, at gasification plant
+      reference product: hydrogen, gaseous, 25 bar
+      exists in original database: True
+      regionalize: True
+
+  DH_CHP_oil:
+    production volume:
+      variable: Heat generation from CHPs and heat plants|District heating|CHP|Oil
+    ecoinvent alias:
+      name: heat and power co-generation, oil
+      reference product: heat, district or industrial, other than natural gas
+      exists in original database: True
+
+  DH_CHP_gas:
+    production volume:
+      variable: Heat generation from CHPs and heat plants|District heating|CHP|Gas
+    ecoinvent alias:
+      name: heat and power co-generation, natural gas, 160kW electrical, Jakobsberg
+      reference product: heat, central or small-scale, natural gas, Jakobsberg
+      exists in original database: True
+
+  DH_CHP_renew_waste:
+    production volume:
+      variable: Heat generation from CHPs and heat plants|District heating|CHP|Wastes|Renewable|CHP Wastes (for District Heating)
+    ecoinvent alias:
+      name: heat production, from biowaste, municipal incineration, energy allocation
+      reference product: heat production, from biowaste, municipal incineration, energy allocation
+      exists in original database: True
+
+  DH_CHP_renew_waste_CCS:
+    production volume:
+      variable: Heat generation from CHPs and heat plants|District heating|CHP|Wastes|Renewable|CHP Wastes (for District Heating) CCS
+    ecoinvent alias:
+      name: heat production, at co-generation biowaste-fired power plant, post, pipeline 200km, storage 1000m
+      reference product: heat, from biowaste, municipal incineration, energy allocation
+      exists in original database: True
+
+  DH_CHP_fossil_waste:
+    production volume:
+      variable: Heat generation from CHPs and heat plants|District heating|CHP|Wastes|Non Renewable|CHP Wastes (for District Heating)
+    ecoinvent alias:
+      name: heat production, from incineration of plastic waste mixture, energy allocation
+      reference product: heat, from incineration of plastic waste mixture, energy allocation
+      exists in original database: True
+
+  DH_CHP_fossil_waste_CCS:
+    production volume:
+      variable: Heat generation from CHPs and heat plants|District heating|CHP|Wastes|Non Renewable|CHP Wastes (for District Heating) CCS
+    ecoinvent alias:
+      name: heat production, at co-generation plastic waste-fired power plant, post, pipeline 200km, storage 1000m
+      reference product: heat, from plastic waste mixture, municipal incineration, energy allocation
+      exists in original database: True
+
+  DH_CHP_wood:
+    production volume:
+      variable: Heat generation from CHPs and heat plants|District heating|CHP|Wood|CHP Wood (for District Heating)
+    ecoinvent alias:
+      name: heat and power co-generation, wood chips, 6667 kW, state-of-the-art 2014
+      reference product: heat, district or industrial, other than natural gas
+      mask: renewable
+      exists in original database: True
+
+  DH_CHP_hydrogen:
+    production volume:
+      variable: Heat generation from CHPs and heat plants|District heating|CHP|Hydrogen|CHP Fuel Cell Hydrogen (for District Heating)
+    ecoinvent alias:
+      name: heat, residential, by combustion of hydrogen using CHP, allocated by exergy, distributed by pipeline, produced by Electrolysis, PEM using electricity from grid
+      reference product: heat, from residential heating system
+      exists in original database: True
+      regionalize: True
+
+  DH_gas:
+    production volume:
+      variable: Heat generation from CHPs and heat plants|District heating|Heat plants|Gas
+    ecoinvent alias:
+      name: heat production, natural gas, at boiler condensing modulating >100kW
+      reference product: heat, district or industrial, natural gas
+      exists in original database: True
+
+  DH_nuclear:
+    production volume:
+      variable: Heat generation from CHPs and heat plants|District heating|Heat plants|Nuclear fuel
+    ecoinvent alias:
+      name: heat, from nuclear power plant
+      reference product: heat
+      exists in original database: True
+
+  DH_oil:
+    production volume:
+      variable: Heat generation from CHPs and heat plants|District heating|Heat plants|Oil|Heat plant oil
+    ecoinvent alias:
+      name: heat production, light fuel oil, at industrial furnace 1MW
+      reference product: heat, district or industrial, other than natural gas
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of heat plants (thermal)|District heating|Heat plants|Oil|Heat plant oil
+        absolute: True
+
+  DH_wood:
+    production volume:
+      variable: Heat generation from CHPs and heat plants|District heating|Heat plants|Wood
+    ecoinvent alias:
+      name: heat production, wood chips from industry, at furnace 5000kW
+      reference product: heat, district or industrial, other than natural gas
+      exists in original database: True
+      mask: renewable
+    efficiency:
+      - variable: Efficiency of heat plants (thermal)|District heating|Heat plants|Wood|Heat plant wood
+        absolute: True
+
+  DH_solar:
+    production volume:
+      variable: Heat generation from CHPs and heat plants|District heating|Heat plants|Solar|Heat plant solar
+    ecoinvent alias:
+      name: heat production, at hot water tank, solar+electric, flat plate, multiple dwelling
+      reference product: heat, solar+electric, multiple-dwelling, for hot water
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of heat plants (thermal)|District heating|Heat plants|Solar|Heat plant solar
+
+  DH_geothermal:
+    production volume:
+      variable: Heat generation from CHPs and heat plants|District heating|Heat plants|Geothermal|Heat plant deep geothermal
+    ecoinvent alias:
+      name: heat production, deep geothermal
+      reference product: heat, deep geothermal
+      exists in original database: True
+      regionalize: True
+
+  DH_heat_pump:
+    production volume:
+      variable: Heat generation from CHPs and heat plants|District heating|Heat plants|Electricity|Heat pump electric
+    ecoinvent alias:
+      name: heat production, air-water heat pump 10kW
+      reference product: heat, air-water heat pump 10kW
+      exists in original database: True
+    efficiency:
+      - variable: Efficiency of heat plants (thermal)|District heating|Heat plants|Electricity|Centralised Heat pump
+
+  FE_industry_process_electric_boiler:
+    production volume:
+      variable: Fuel consumption in industry sectors|Electricity|Electric boiler
+    ecoinvent alias:
+      name: electricity, used in industrial electric boiler
+      reference product: electricity, low voltage
+      exists in original database: True
+  
+  FE_industry_process_heat_pump:
+    production volume:
+      variable: Fuel consumption in industry sectors|Electricity|Heat pump electric
+    ecoinvent alias:
+      name: electricity, used in industrial heat pump
+      reference product: electricity, low voltage
+      exists in original database: True
+  
+  FE_industry_process_FE_other_electric:
+    production volume:
+      variable: Fuel consumption in industry sectors|Electricity|Other electric processes
+    ecoinvent alias:
+      name: electricity, used in industrial electric processes
+      reference product: electricity, low voltage
+      exists in original database: True
+  
+  FE_industry_process_light_fuel_oil:
+    production volume:
+      variable: Fuel consumption in industry sectors|Oil|Total|Light fuel boiler
+    ecoinvent alias:
+      name: light fuel oil, burned in industrial furnace 1MW
+      reference product: heat
+      exists in original database: True
+  
+  FE_industry_process_heavy_fuel_oil:
+    production volume:
+      variable: Fuel consumption in industry sectors|Oil|Fossil liquids|Heavy fuel oil|Heavy fuel oil boiler
+    ecoinvent alias:
+      name: heavy fuel oil, burned in industrial furnace 1MW
+      reference product: heat
+      exists in original database: True
+  
+  FE_industry_process_natural_gas:
+    production volume:
+      variable: Fuel consumption in industry sectors|Gas|Total|Gas boiler
+    ecoinvent alias:
+      name: natural gas, burned in industrial furnace >100kW
+      reference product: heat
+      exists in original database: True
+
+  FE_industry_process_biomethane:
+    production volume:
+      variable: Fuel consumption in industry sectors|Gas|Total|Biogas boiler
+    ecoinvent alias:
+      name: heat production, biomethane, at boiler condensing modulating <100kW
+      reference product: heat, central or small-scale, biomethane
+      exists in original database: True
+  
+  FE_industry_process_coal:
+    production volume:
+      variable: Fuel consumption in industry sectors|Coal|Coal boiler
+    ecoinvent alias:
+      name: hard coal, burned in hard coal industrial furnace 1-10MW
+      reference product: heat
+      exists in original database: True
+  
+  FE_industry_heat_CHP_oil:
+    production volume:
+      variable: Fuel consumption in industry sectors|Heat|On-site CHPs|Industrial CHPs oil
+    ecoinvent alias:
+      name: heat, from on-site industrial oil-fired CHP
+      reference product: heat
+      exists in original database: True
+  
+  FE_industry_heat_CHP_gas:
+    production volume:
+      variable: Fuel consumption in industry sectors|Heat|On-site CHPs|Industrial CHPs gas
+    ecoinvent alias:
+      name: heat, from on-site industrial gas-fired CHP
+      reference product: heat
+      exists in original database: True
+      mask: CCS
+  
+  FE_industry_heat_CHP_gas_CCS:
+    production volume:
+      variable: Fuel consumption in industry sectors|Heat|On-site CHPs|Industrial CHPs gas (CCS)
+    ecoinvent alias:
+      name: heat, from on-site industrial gas-fired CHP with CCS
+      reference product: heat
+      exists in original database: True
+  
+  FE_industry_heat_CHP_fuel_cell:
+    production volume:
+      variable: Fuel consumption in industry sectors|Heat|On-site CHPs|Industrial CHPs fuel cells (gas reformer)
+    ecoinvent alias:
+      name: heat, from on-site industrial fuel cell CHP
+      reference product: heat
+      exists in original database: True
+  
+  FE_industry_heat_CHP_waste_non_renew:
+    production volume:
+      variable: Fuel consumption in industry sectors|Heat|On-site CHPs|Industrial CHPs wastes
+    ecoinvent alias:
+      name: heat, from on-site industrial non-renewable waste-fired CHP
+      reference product: heat
+      exists in original database: True
+      mask: CCS
+  
+  FE_industry_heat_CHP_waste_non_renew_CCS:
+    production volume:
+      variable: Fuel consumption in industry sectors|Heat|On-site CHPs|Industrial CHPs wastes CCS
+    ecoinvent alias:
+      name: heat, from on-site industrial non-renewable waste-fired CHP with CCS
+      reference product: heat
+      exists in original database: True
+  
+  FE_industry_heat_CHP_wood:
+    production volume:
+      variable: Fuel consumption in industry sectors|Heat|On-site CHPs|Industrial CHPs wood
+    ecoinvent alias:
+      name: heat, from on-site industrial wood-fired CHP
+      reference product: heat
+      exists in original database: True
+      mask: CCS
+  
+  FE_industry_heat_CHP_wood_CCS:
+    production volume:
+      variable: Fuel consumption in industry sectors|Heat|On-site CHPs|Industrial CHPs wood (CCS)
+    ecoinvent alias:
+      name: heat, from on-site industrial wood-fired CHP with CCS
+      reference product: heat
+      exists in original database: True
+  
+  FE_industry_heat_CHP_hydrogen:
+    production volume:
+      variable: Fuel consumption in industry sectors|Heat|On-site CHPs|Industrial CHPs fuel cells (hydrogen)
+    ecoinvent alias:
+      name: heat, from on-site industrial hydrogen-fired CHP
+      reference product: heat
+      exists in original database: True
+  
+  FE_industry_heat_DH:
+    production volume:
+      variable: Fuel consumption in industry sectors|Heat|District heating
+    ecoinvent alias:
+      name: market for district heating (SPS)
+      reference product: heat, district or industrial, other than natural gas
+      exists in original database: False
+      new dataset: True
+  
+  FE_industry_process_wood:
+    production volume:
+      variable: Fuel consumption in industry sectors|Wood|Wood boiler
+    ecoinvent alias:
+      name: wood, burned in wood industrial furnace 1-10MW
+      reference product: heat
+      exists in original database: True
+  
+  FE_industry_process_pellet:
+    production volume:
+      variable: Fuel consumption in industry sectors|Pellets|Pellet boiler
+    ecoinvent alias:
+      name: pellet, burned in pellet industrial furnace 300kW
+      reference product: heat
+      exists in original database: True
+  
+  FE_industry_process_waste_non_renew:
+    production volume:
+      variable: Fuel consumption in industry sectors|Wastes|Non Renewable|Wastes boiler
+    ecoinvent alias:
+      name: non-renewable waste, burned in industrial furnace
+      reference product: heat
+      exists in original database: True
+  
+  FE_industry_process_waste_renew:
+    production volume:
+      variable: Fuel consumption in industry sectors|Wastes|Renewable|Wastes boiler
+    ecoinvent alias:
+      name: renewable waste, burned in industrial furnace
+      reference product: heat
+      exists in original database: True
+      mask: non-renewable
+  
+  FE_industry_process_solar:
+    production volume:
+      variable: Fuel consumption in industry sectors|Solar|Solar thermal
+    ecoinvent alias:
+      name: solar energy, from industrial hot water tank
+      reference product: heat
+      exists in original database: True
+  
+  FE_industry_process_hydrogen:
+    production volume:
+      variable: Fuel consumption in industry sectors|Hydrogen|Hydrogen boiler
+    ecoinvent alias:
+      name: hydrogen burned, in hydrogen boiler
+      reference product: heat
+      exists in original database: True
+
+  FE_services_electric_boiler:
+    production volume:
+      variable: Fuel consumption in Services sectors|Electricity|Electric boiler
+    ecoinvent alias:
+      name: electricity, used in industrial electric boiler
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_services_heat_pump:
+    production volume:
+      variable: Fuel consumption in Services sectors|Electricity|Heat pump electric
+    ecoinvent alias:
+      name: electricity, used in industrial heat pump
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_services_other_electric:
+    production volume:
+      variable: Fuel consumption in Services sectors|Electricity|Other electric appliances
+    ecoinvent alias:
+      name: electricity, used in industrial electric processes
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_services_light_fuel_oil:
+    production volume:
+      variable: Fuel consumption in Services sectors|Oil|Total|Light fuel boiler
+    ecoinvent alias:
+      name: light fuel oil, burned in industrial furnace 1MW
+      reference product: heat
+      exists in original database: True
+
+  FE_services_natural_gas:
+    production volume:
+      variable: Fuel consumption in Services sectors|Gas|Total|Gas boiler
+    ecoinvent alias:
+      name: natural gas, burned in industrial furnace >100kW
+      reference product: heat
+      exists in original database: True
+
+  FE_services_biomethane:
+    production volume:
+      variable: Fuel consumption in Services sectors|Gas|Total|Biogas boiler
+    ecoinvent alias:
+      name: heat production, biomethane, at boiler condensing modulating <100kW
+      reference product: heat, central or small-scale, biomethane
+      exists in original database: True
+
+  FE_services_CHP_gas:
+    production volume:
+      variable: Fuel consumption in Services sectors|Heat|On-site CHPs|Services sectors CHPs gas
+    ecoinvent alias:
+      name: heat, from on-site industrial gas-fired CHP
+      reference product: heat
+      exists in original database: True
+
+  FE_services_CHP_biogas:
+    production volume:
+      variable: Fuel consumption in Services sectors|Heat|On-site CHPs|Services sectors CHPs (bio)gas
+    ecoinvent alias:
+      name: heat, from on-site industrial biogas-fired CHP
+      reference product: heat
+      exists in original database: True
+
+  FE_services_CHP_fuel_cell:
+    production volume:
+      variable: Fuel consumption in Services sectors|Heat|On-site CHPs|Services sectors CHPs fuel cells (gas reformer)
+    ecoinvent alias:
+      name: heat, from on-site industrial fuel cell CHP
+      reference product: heat
+      exists in original database: True
+
+  FE_services_CHP_wood:
+    production volume:
+      variable: Fuel consumption in Services sectors|Heat|On-site CHPs|Services sectors CHPs wood
+    ecoinvent alias:
+      name: heat, from on-site industrial wood-fired CHP
+      reference product: heat
+      exists in original database: True
+
+  FE_services_CHP_hydrogen:
+    production volume:
+      variable: Fuel consumption in Services sectors|Heat|On-site CHPs|Services sectors CHPs fuel cells (hydrogen)
+    ecoinvent alias:
+      name: heat, from on-site industrial hydrogen-fired CHP
+      reference product: heat
+      exists in original database: True
+
+  FE_services_DH:
+    production volume:
+      variable: Fuel consumption in Services sectors|Heat|District heating
+    ecoinvent alias:
+      name: market for district heating (SPS)
+      reference product: heat, district or industrial, other than natural gas
+      exists in original database: False
+      new dataset: True
+
+  FE_services_wood:
+    production volume:
+      variable: Fuel consumption in Services sectors|Wood|Wood boiler
+    ecoinvent alias:
+      name: wood, burned in wood industrial furnace 1-10MW
+      reference product: heat
+      exists in original database: True
+
+  FE_services_pellet:
+    production volume:
+      variable: Fuel consumption in Services sectors|Pellets|Pellet boiler
+    ecoinvent alias:
+      name: pellet, burned in pellet industrial furnace 300kW
+      reference product: heat
+      exists in original database: True
+
+  FE_services_solar:
+    production volume:
+      variable: Fuel consumption in Services sectors|Solar|Solar thermal
+    ecoinvent alias:
+      name: solar energy, from industrial hot water tank
+      reference product: heat
+      exists in original database: True
+
+  FE_services_hydrogen:
+    production volume:
+      variable: Fuel consumption in Services sectors|Hydrogen|From hydrogen grid|Hydrogen boiler
+    ecoinvent alias:
+      name: hydrogen burned, in hydrogen boiler
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_space_heating_electric_boiler:
+    production volume:
+      variable: Fuel consumption in Residential sector|Electricity|Space heating|Electric boiler
+    ecoinvent alias:
+      name: electricity, used in residential electric boiler
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_residential_space_heating_heat_pump:
+    production volume:
+      variable: Fuel consumption in Residential sector|Electricity|Space heating|Heat pump electric
+    ecoinvent alias:
+      name: electricity, used in residential heat pump
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_residential_water_heating_electric_boiler:
+    production volume:
+      variable: Fuel consumption in Residential sector|Electricity|Water heating|Electric boiler
+    ecoinvent alias:
+      name: electricity, used in residential electric boiler
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_residential_water_heating_heat_pump:
+    production volume:
+      variable: Fuel consumption in Residential sector|Electricity|Water heating|Heat pump electric
+    ecoinvent alias:
+      name: electricity, used in residential heat pump
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_residential_FE_other_electric:
+    production volume:
+      variable: Fuel consumption in Residential sector|Electricity|Other appliances
+    ecoinvent alias:
+      name: electricity, used in residential electric appliances
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_residential_space_heating_light_fuel_oil:
+    production volume:
+      variable: Fuel consumption in Residential sector|Oil|Total|Space heating|Light fuel boiler
+    ecoinvent alias:
+      name: light fuel oil, burned in residential 10kW boiler
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_water_heating_light_fuel_oil:
+    production volume:
+      variable: Fuel consumption in Residential sector|Oil|Total|Water heating|Light fuel boiler
+    ecoinvent alias:
+      name: light fuel oil, burned in residential 10kW boiler
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_space_heating_gas:
+    production volume:
+      variable: Fuel consumption in Residential sector|Gas|Total|Space heating|Gas boiler
+    ecoinvent alias:
+      name: natural gas, burned in residential natural gas boiler <100kW
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_space_heating_heat_pump_gas:
+    production volume:
+      variable: Fuel consumption in Residential sector|Gas|Total|Space heating|Heat pump gas
+    ecoinvent alias:
+      name: natural gas, burned in residential natural gas boiler <100kW
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_water_heating_gas:
+    production volume:
+      variable: Fuel consumption in Residential sector|Gas|Total|Water heating|Gas boiler
+    ecoinvent alias:
+      name: natural gas, burned in residential natural gas boiler <100kW
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_water_heating_heat_pump_gas:
+    production volume:
+      variable: Fuel consumption in Residential sector|Gas|Total|Water heating|Heat pump gas
+    ecoinvent alias:
+      name: natural gas, burned in residential natural gas boiler <100kW
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_space_heating_coal:
+    production volume:
+      variable: Fuel consumption in Residential sector|Coal|Space heating|Coal boiler
+    ecoinvent alias:
+      name: hard coal, burned in hard coal residential boiler 5-15kW
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_water_heating_coal:
+    production volume:
+      variable: Fuel consumption in Residential sector|Coal|Water heating|Coal boiler
+    ecoinvent alias:
+      name: hard coal, burned in hard coal residential boiler 5-15kW
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_space_heating_wood:
+    production volume:
+      variable: Fuel consumption in Residential sector|Wood|Space heating|Wood boiler
+    ecoinvent alias:
+      name: wood, burned in residential wood stove 5-15kW
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_water_heating_wood:
+    production volume:
+      variable: Fuel consumption in Residential sector|Wood|Water heating|Wood boiler
+    ecoinvent alias:
+      name: wood, burned in residential wood stove 5-15kW
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_space_heating_pellet:
+    production volume:
+      variable: Fuel consumption in Residential sector|Pellets|Space heating|Pellets boiler
+    ecoinvent alias:
+      name: pellet, burned in residential pellet stove 5-15kW
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_water_heating_pellet:
+    production volume:
+      variable: Fuel consumption in Residential sector|Pellets|Water heating|Pellets boiler
+    ecoinvent alias:
+      name: pellet, burned in residential pellet stove 5-15kW
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_space_heating_solar:
+    production volume:
+      variable: Fuel consumption in Residential sector|Solar|Space heating|Solar thermal
+    ecoinvent alias:
+      name: solar energy, from residential hot water tank
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_water_heating_solar:
+    production volume:
+      variable: Fuel consumption in Residential sector|Solar|Water heating|Solar thermal
+    ecoinvent alias:
+      name: solar energy, from residential hot water tank
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_space_heating_hydrogen:
+    production volume:
+      variable: Fuel consumption in Residential sector|Hydrogen|From hydrogen grid|Space heating|Hydrogen boiler
+    ecoinvent alias:
+      name: hydrogen burned, in hydrogen boiler
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_water_heating_hydrogen:
+    production volume:
+      variable: Fuel consumption in Residential sector|Hydrogen|From hydrogen grid|Water heating|Hydrogen boiler
+    ecoinvent alias:
+      name: hydrogen burned, in hydrogen boiler
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_space_heating_CHP_gas:
+    production volume:
+      variable: Fuel consumption in Residential sector|Heat|On-site CHPs|Residential sector CHPs gas
+    ecoinvent alias:
+      name: heat, from on-site residential gas-fired CHP
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_space_heating_CHP_fuel_cell:
+    production volume:
+      variable: Fuel consumption in Residential sector|Heat|On-site CHPs|Residential sector CHPs fuel cells (gas reformer)
+    ecoinvent alias:
+      name: heat, from on-site residential fuel cell CHP
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_space_heating_CHP_wood:
+    production volume:
+      variable: Fuel consumption in Residential sector|Heat|On-site CHPs|Residential sector CHPs wood
+    ecoinvent alias:
+      name: heat, from on-site residential wood-fired CHP
+      reference product: heat
+      exists in original database: True
+
+  FE_residential_space_heating_DH:
+    production volume:
+      variable: Fuel consumption in Residential sector|Heat|District heating
+    ecoinvent alias:
+      name: market for district heating (SPS)
+      reference product: heat, district or industrial, other than natural gas
+      exists in original database: False
+      new dataset: True
+
+  FE_cars_electricity:
+    production volume:
+      variable: Fuel consumption in cars|Electricity
+    ecoinvent alias:
+      name: electricity, used in passenger car vehicle
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_cars_hydrogen:
+    production volume:
+      variable: Fuel consumption in cars|Hydrogen
+    ecoinvent alias:
+      name: hydrogen, used in passenger car vehicle
+      reference product: heat
+      exists in original database: True
+
+  FE_cars_gasoline:
+    production volume:
+      variable: Fuel consumption in cars|Motor Gasoline
+    ecoinvent alias:
+      name: petrol, burned in passenger car vehicle
+      reference product: heat
+      exists in original database: True
+
+  FE_cars_diesel:
+    production volume:
+      variable: Fuel consumption in cars|Motor Diesel
+    ecoinvent alias:
+      name: diesel, burned in passenger car vehicle
+      reference product: heat
+      exists in original database: True
+
+  FE_cars_gas:
+    production volume:
+      variable: Fuel consumption in cars|Gas
+    ecoinvent alias:
+      name: compressed gas, burned in passenger car vehicle
+      reference product: heat
+      exists in original database: True
+
+  FE_bus_electricity:
+    production volume:
+      variable: Fuel consumption in urban buses|Electricity
+    ecoinvent alias:
+      name: electricity, used in single deck coach or urban bus
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_bus_hydrogen:
+    production volume:
+      variable: Fuel consumption in urban buses|Hydrogen
+    ecoinvent alias:
+      name: hydrogen, used in single deck coach or urban bus
+      reference product: heat
+      exists in original database: True
+
+  FE_bus_diesel:
+    production volume:
+      variable: Fuel consumption in urban buses|Motor Diesel
+    ecoinvent alias:
+      name: diesel, burned in single deck coach or urban bus
+      reference product: heat
+      exists in original database: True
+
+  FE_bus_gas:
+    production volume:
+      variable: Fuel consumption in urban buses|Motor Gas
+    ecoinvent alias:
+      name: compressed gas, burned in single deck coach or urban bus
+      reference product: heat
+      exists in original database: True
+
+  FE_coach_electricity:
+    production volume:
+      variable: Fuel consumption in coaches|Electricity
+    ecoinvent alias:
+      name: electricity, used in single deck coach or urban bus
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_coach_hydrogen:
+    production volume:
+      variable: Fuel consumption in coaches|Hydrogen
+    ecoinvent alias:
+      name: hydrogen, used in single deck coach or urban bus
+      reference product: heat
+      exists in original database: True
+
+  FE_coach_diesel:
+    production volume:
+      variable: Fuel consumption in coaches|Motor Diesel
+    ecoinvent alias:
+      name: diesel, burned in single deck coach or urban bus
+      reference product: heat
+      exists in original database: True
+
+  FE_coach_gas:
+    production volume:
+      variable: Fuel consumption in coaches|Motor Gas
+    ecoinvent alias:
+      name: compressed gas, burned in single deck coach or urban bus
+      reference product: heat
+      exists in original database: True
+
+  FE_trolleybus:
+    production volume:
+      variable: Fuel consumption in trolleybuses|Electricity
+    ecoinvent alias:
+      name: electricity, used in single deck trolleybus
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_tram:
+    production volume:
+      variable: Fuel consumption in trams|Electricity
+    ecoinvent alias:
+      name: electricity, used in tram
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_motorcycle_gasoline:
+    production volume:
+      variable: Fuel consumption in motorised two wheelers|Motor Gasoline
+    ecoinvent alias:
+      name: petrol, burned in motorcycle
+      reference product: heat
+      exists in original database: True
+
+  FE_motorcycle_electric:
+    production volume:
+      variable: Fuel consumption in motorised two wheelers|Electricity
+    ecoinvent alias:
+      name: electricity, used in battery electric motorcycle
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_motorcycle_hydrogen:
+    production volume:
+      variable: Fuel consumption in motorised two wheelers|Hydrogen
+    ecoinvent alias:
+      name: hydrogen, used in hydrogen motorcycle
+      reference product: heat
+      exists in original database: True
+
+  FE_light_duty_truck_diesel:
+    production volume:
+      variable: Fuel consumption in light duty vehicles|Motor Diesel
+    ecoinvent alias:
+      name: diesel, burned in passenger car vehicle
+      reference product: heat
+      exists in original database: True
+
+  FE_light_duty_truck_gasoline:
+    production volume:
+      variable: Fuel consumption in light duty vehicles|Motor Gasoline
+    ecoinvent alias:
+      name: petrol, burned in passenger car vehicle
+      reference product: heat
+      exists in original database: True
+
+  FE_light_duty_truck_electricity:
+    production volume:
+      variable: Fuel consumption in light duty vehicles|Electricity
+    ecoinvent alias:
+      name: electricity, used in passenger car vehicle
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_light_duty_truck_hydrogen:
+    production volume:
+      variable: Fuel consumption in light duty vehicles|Hydrogen
+    ecoinvent alias:
+      name: hydrogen, used in passenger car vehicle
+      reference product: heat
+      exists in original database: True
+
+  FE_light_duty_truck_gas:
+    production volume:
+      variable: Fuel consumption in light duty vehicles|Motor Gas
+    ecoinvent alias:
+      name: compressed gas, burned in passenger car vehicle
+      reference product: heat
+      exists in original database: True
+
+  FE_heavy_duty_truck_diesel:
+    production volume:
+      variable: Fuel consumption in heavy duty vehicles|Motor Diesel
+    ecoinvent alias:
+      name: diesel, burned in heavy duty vehicle
+      reference product: heat
+      exists in original database: True
+
+  FE_heavy_duty_truck_gasoline:
+    production volume:
+      variable: Fuel consumption in heavy duty vehicles|Motor Gasoline
+    ecoinvent alias:
+      name: petrol, burned in passenger car vehicle
+      reference product: heat
+      exists in original database: True
+
+  FE_heavy_duty_truck_electricity:
+    production volume:
+      variable: Fuel consumption in heavy duty vehicles|Electricity
+    ecoinvent alias:
+      name: electricity, used in heavy duty vehicle
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_heavy_duty_truck_hydrogen:
+    production volume:
+      variable: Fuel consumption in heavy duty vehicles|Hydrogen
+    ecoinvent alias:
+      name: hydrogen, used in heavy duty vehicle
+      reference product: heat
+      exists in original database: True
+
+  FE_heavy_duty_truck_gas:
+    production volume:
+      variable: Fuel consumption in heavy duty vehicles|Motor Gas
+    ecoinvent alias:
+      name: compressed gas, burned in heavy duty vehicle
+      reference product: heat
+      exists in original database: True
+
+
+  FE_other_transport_gasoline:
+    production volume:
+      variable: Fuel consumption in other transport|Motor Gasoline
+    ecoinvent alias:
+      name: petrol, burned in passenger car vehicle
+      reference product: heat
+      exists in original database: True
+
+  FE_other_transport_diesel:
+    production volume:
+      variable: Fuel consumption in other transport|Motor Diesel
+    ecoinvent alias:
+      name: diesel, burned in passenger car vehicle
+      reference product: heat
+      exists in original database: True
+
+  FE_other_transport_electric:
+    production volume:
+      variable: Fuel consumption in other transport|Electricity
+    ecoinvent alias:
+      name: electricity, used in passenger car vehicle
+      reference product: electricity, low voltage
+      exists in original database: True
+
+  FE_other_transport_hydrogen:
+    production volume:
+      variable: Fuel consumption in other transport|Hydrogen
+    ecoinvent alias:
+      name: hydrogen, used in passenger car vehicle
+      reference product: heat
+      exists in original database: True
+
+markets:
+
+  - name: market for biogas, domestic (SPS)
+    reference product: biogas
+    unit: cubic meter
+    includes:
+      - biogas, fermentation, sewage sludge (domestic)
+      - biogas, fermentation, biomass (domestic)
+
+    replaces:
+      - name: market for biogas
+        product: biogas
+        location: CH
+
+    replaces in:
+      - location: CH
+
+    is fuel:
+      biogas, fermentation, sewage sludge (domestic):
+        Carbon dioxide, fossil: 0.0
+        Carbon dioxide, non-fossil: 1.96
+      biogas, fermentation, biomass (domestic):
+        Carbon dioxide, fossil: 0.0
+        Carbon dioxide, non-fossil: 1.96
+
+  - name: market for methane (SPS)
+    reference product: gas
+    unit: cubic meter
+    includes:
+      - natural gas (import)
+      - lng (import)
+      - synthetic natural gas (import)
+      - biomethane (import)
+      - biomethane (domestic)
+      - synthetic natural gas (domestic)
+
+    replaces:
+      - name: market for natural gas, high pressure
+        product: natural gas, high pressure
+        location: CH
+
+      - name: market for natural gas, high pressure, vehicle grade
+        product: natural gas, high pressure, vehicle grade
+        location: CH
+
+      - name: market for natural gas, low pressure
+        product: natural gas, low pressure
+        location: CH
+
+    replaces in:
+      - location: CH
+
+    is fuel:
+      natural gas (import):
+        Carbon dioxide, fossil: 1.944
+        Carbon dioxide, non-fossil: 0.0
+      lng (import):
+        Carbon dioxide, fossil: 1.944
+        Carbon dioxide, non-fossil: 0.0
+      synthetic natural gas (import):
+        Carbon dioxide, fossil: 0.0
+        Carbon dioxide, non-fossil: 1.944
+      biomethane (import):
+        Carbon dioxide, fossil: 0.0
+        Carbon dioxide, non-fossil: 1.944
+      biomethane (domestic):
+        Carbon dioxide, fossil: 0.0
+        Carbon dioxide, non-fossil: 1.944
+      synthetic natural gas (domestic):
+        Carbon dioxide, fossil: 0.0
+        Carbon dioxide, non-fossil: 1.944
+
+  - name: market for light fuel oil (SPS)
+    reference product: light fuel oil
+    unit: kilogram
+    includes:
+      - light_fuel_oil
+
+    add:
+      - name: market for transport, freight, train, fleet average
+        reference product: transport, freight, train, fleet average
+        amount: 0.0336
+      - name: market for transport, freight, lorry, unspecified
+        reference product: transport, freight, lorry, diesel, unspecified
+        amount: 0.0326
+      - name: market for electricity, low voltage
+        reference product: electricity, low voltage
+        amount: 0.0067
+      - name: market for tap water
+        reference product: tap water
+        amount: 0.000689
+      - name: light fuel oil production, from waste polyethylene
+        reference product: light fuel oil
+        amount: 0.000551109935409916
+      - name: infrastructure construction, for regional distribution of oil product
+        reference product: infrastructure, for regional distribution of oil product
+        amount: 1.04e-10
+      - name: treatment of wastewater, average, wastewater treatment
+        reference product: wastewater, average
+        amount: -6.89e-07
+      - name: market for municipal solid waste
+        reference product: municipal solid waste
+        amount: -6.27e-06
+      - name: market for fly ash and scrubber sludge
+        reference product: fly ash and scrubber sludge
+        amount: -1.85e-05
+      - name: market for rainwater mineral oil storage
+        reference product: rainwater mineral oil storage
+        amount: -5.00e-05
+      - name: Water
+        categories: air
+        unit: cubic meter
+        amount: 1.0335e-07
+      - name: Water
+        categories: water
+        unit: cubic meter
+        amount: 5.8565e-07
+
+    replaces:
+      - name: market for light fuel oil
+        product: light fuel oil
+        location: CH
+        operator: equals
+
+  - name: market for heavy fuel oil (SPS)
+    reference product: heavy fuel oil
+    unit: kilogram
+    includes:
+      - heavy fuel oil
+
+    add:
+      - name: market for electricity, low voltage
+        reference product: electricity, low voltage
+        amount: 0.0067
+      - name: market for fly ash and scrubber sludge
+        reference product: fly ash and scrubber sludge
+        amount: -1.85e-05
+      - name: infrastructure construction, for regional distribution of oil product
+        reference product: infrastructure, for regional distribution of oil product
+        amount: 1.04e-10
+      - name: market for municipal solid waste
+        reference product: municipal solid waste
+        amount: -6.27e-06
+      - name: market for rainwater mineral oil storage
+        reference product: rainwater mineral oil storage
+        amount: -5.00e-05
+      - name: market for tap water
+        reference product: tap water
+        amount: 0.000689
+      - name: market for transport, freight, train, fleet average
+        reference product: transport, freight, train, fleet average
+        amount: 0.0336
+      - name: market for transport, freight, lorry, unspecified
+        reference product: transport, freight, lorry, diesel, unspecified
+        amount: 0.0326
+      - name: treatment of wastewater, average, wastewater treatment
+        reference product: wastewater, average
+        amount: -6.89e-07
+      - name: Water
+        categories: air
+        unit: cubic meter
+        amount: 1.0335e-07
+      - name: Water
+        categories: water
+        unit: cubic meter
+        amount: 5.8565e-07
+
+    replaces:
+      - name: market for heavy fuel oil
+        product: heavy fuel oil
+        location: CH
+        operator: equals
+
+  - name: market for biomass, for power generation (SPS)
+    reference product: biomass
+    unit: kilogram
+    includes:
+      - wood (waste)
+      - wood (residues)
+      - wood (landscape maintenance)
+      - wood (forest)
+
+    replaces:
+      - name: market for wood chips, wet, measured as dry mass
+        product: wood chips, wet, measured as dry mass
+        location: CH
+      - name: market for wood chips, dry, measured as dry mass
+        product: wood chips, dry, measured as dry mass
+        location: RER
+      - name: market for biomass, used as fuel
+        product: biomass, used as fuel
+
+    replaces in:
+      - location: CH
+
+  - name: market for diesel (SPS)
+    reference product: diesel
+    unit: kilogram
+    includes:
+      - biodiesel, wood, FT (domestic)
+      - biodiesel, wood, FT w CCS (domestic)
+      - biodiesel (import)
+      - synthetic diesel (domestic)
+      - synthetic diesel (import)
+      - fossil diesel (import)
+
+    replaces:
+      - name: market for diesel
+        product: diesel
+        operator: equals
+      - name: market for diesel, low-sulfur
+        product: diesel, low-sulfur
+        operator: equals
+
+    replaces in:
+      - location: CH
+
+    add:
+      - name: infrastructure construction, for regional distribution of oil product
+        reference product: infrastructure, for regional distribution of oil product
+        amount: 2.6e-10
+      - name: market for fly ash and scrubber sludge
+        reference product: fly ash and scrubber sludge
+        amount: -0.000168
+      - name: market for heat, central or small-scale, other than natural gas
+        reference product: heat, central or small-scale, other than natural gas
+        amount: -0.000584
+      - name: market for municipal solid waste
+        reference product: municipal solid waste
+        amount: -6.27e-06
+      - name: market for rainwater mineral oil storage
+        reference product: rainwater mineral oil storage
+        amount: -7.5e-05
+      - name: market for tap water
+        reference product: tap water
+        amount: 0.000689
+      - name: market for transport, freight, train, fleet average
+        reference product: transport, freight, train, fleet average
+        amount: 0.0336
+      - name: market for transport, freight, lorry, unspecified
+        reference product: transport, freight, lorry, diesel, unspecified
+        amount: 0.0326
+      - name: market for electricity, low voltage
+        reference product: electricity, low voltage
+        amount: 0.0067
+      - name: market for diesel
+        reference product: diesel
+        amount: 0.000551109935409916
+      - name: treatment of wastewater, average, wastewater treatment
+        reference product: wastewater, average
+        amount: -6.89e-07
+      - name: Water
+        categories: air
+        unit: cubic meter
+        amount: 1.0335e-07
+      - name: Water
+        categories: water
+        unit: cubic meter
+        amount: 5.8565e-07
+
+    is fuel:
+        biodiesel, wood, FT (domestic):
+          Carbon dioxide, fossil: 0.0
+          Carbon dioxide, non-fossil: 3.15
+        biodiesel, wood, FT w CCS (domestic):
+          Carbon dioxide, fossil: 0.0
+          Carbon dioxide, non-fossil: 3.15
+        biodiesel (import):
+          Carbon dioxide, fossil: 0.0
+          Carbon dioxide, non-fossil: 3.15
+        synthetic diesel (domestic):
+          Carbon dioxide, fossil: 0.0
+          Carbon dioxide, non-fossil: 3.15
+        synthetic diesel (import):
+          Carbon dioxide, fossil: 0.0
+          Carbon dioxide, non-fossil: 3.15
+        fossil diesel (import):
+          Carbon dioxide, fossil: 3.15
+          Carbon dioxide, non-fossil: 0.0
+
+  - name: market for petrol (SPS)
+    reference product: petrol
+    unit: kilogram
+    includes:
+      - bioethanol (import)
+      - synthetic gasoline (import)
+      - fossil gasoline (import)
+      - bioethanol (domestic)
+      - bioethanol, w CCS (domestic)
+
+    replaces:
+        - name: market for petrol, low-sulfur
+          product: petrol, low-sulfur
+          operator: contains
+
+    replaces in:
+      - location: CH
+
+    add:
+      - name: infrastructure construction, for regional distribution of oil product
+        reference product: infrastructure, for regional distribution of oil product
+        amount: 2.6e-10
+      - name: market for fly ash and scrubber sludge
+        reference product: fly ash and scrubber sludge
+        amount: -0.000168
+      - name: market for heat, central or small-scale, other than natural gas
+        reference product: heat, central or small-scale, other than natural gas
+        amount: -0.000584
+      - name: market for municipal solid waste
+        reference product: municipal solid waste
+        amount: -6.27e-06
+      - name: market for rainwater mineral oil storage
+        reference product: rainwater mineral oil storage
+        amount: -7.5e-05
+      - name: market for tap water
+        reference product: tap water
+        amount: 0.000689
+      - name: market for transport, freight, train, fleet average
+        reference product: transport, freight, train, fleet average
+        amount: 0.0336
+      - name: market for transport, freight, lorry, unspecified
+        reference product: transport, freight, lorry, diesel, unspecified
+        amount: 0.0326
+      - name: market for electricity, low voltage
+        reference product: electricity, low voltage
+        amount: 0.0067
+      - name: treatment of wastewater, average, wastewater treatment
+        reference product: wastewater, average
+        amount: -6.89e-07
+      - name: Water
+        categories: air
+        unit: cubic meter
+        amount: 1.0335e-07
+      - name: Water
+        categories: water
+        unit: cubic meter
+        amount: 5.8565e-07
+
+    is fuel:
+      bioethanol (import):
+          Carbon dioxide, fossil: 0.0
+          Carbon dioxide, non-fossil: 3.15
+      synthetic gasoline (import):
+          Carbon dioxide, fossil: 0.0
+          Carbon dioxide, non-fossil: 3.15
+      fossil gasoline (import):
+          Carbon dioxide, fossil: 3.15
+          Carbon dioxide, non-fossil: 0.0
+      bioethanol (domestic):
+          Carbon dioxide, fossil: 0.0
+          Carbon dioxide, non-fossil: 3.15
+      bioethanol, w CCS (domestic):
+          Carbon dioxide, fossil: 0.0
+          Carbon dioxide, non-fossil: 3.15
+
+  - name: market for kerosene (SPS)
+    reference product: kerosene
+    unit: kilogram
+    includes:
+      - kerosene (import)
+      - synthetic kerosene (import)
+      - synthetic kerosene (domestic)
+
+    replaces:
+      - name: market for kerosene
+        product: kerosene
+        location: CH
+        operator: contains
+
+    add:
+      - name: infrastructure construction, for regional distribution of oil product
+        reference product: infrastructure, for regional distribution of oil product
+        amount: 2.6e-10
+      - name: market for fly ash and scrubber sludge
+        reference product: fly ash and scrubber sludge
+        amount: -0.000168
+      - name: market for heat, central or small-scale, other than natural gas
+        reference product: heat, central or small-scale, other than natural gas
+        amount: -0.000584
+      - name: market for municipal solid waste
+        reference product: municipal solid waste
+        amount: -6.27e-06
+      - name: market for rainwater mineral oil storage
+        reference product: rainwater mineral oil storage
+        amount: -7.5e-05
+      - name: market for tap water
+        reference product: tap water
+        amount: 0.000689
+      - name: market for transport, freight, train, fleet average
+        reference product: transport, freight, train, fleet average
+        amount: 0.0336
+      - name: market for transport, freight, lorry, unspecified
+        reference product: transport, freight, lorry, diesel, unspecified
+        amount: 0.0326
+      - name: market for electricity, low voltage
+        reference product: electricity, low voltage
+        amount: 0.0067
+      - name: market for kerosene
+        reference product: kerosene
+        amount: 0.000551109935409916
+      - name: treatment of wastewater, average, wastewater treatment
+        reference product: wastewater, average
+        amount: -6.89e-07
+      - name: Water
+        categories: air
+        unit: cubic meter
+        amount: 1.0335e-07
+      - name: Water
+        categories: water
+        unit: cubic meter
+        amount: 5.8565e-07
+
+    is fuel:
+      kerosene (import):
+          Carbon dioxide, fossil: 3.15
+          Carbon dioxide, non-fossil: 0.0
+      synthetic kerosene (import):
+          Carbon dioxide, fossil: 0.0
+          Carbon dioxide, non-fossil: 3.15
+      synthetic kerosene (domestic):
+          Carbon dioxide, fossil: 0.0
+          Carbon dioxide, non-fossil: 3.15
+
+  - name: market for hydrogen (SPS)
+    reference product: hydrogen
+    unit: kilogram
+    includes:
+      - hydrogen (import)
+      - hydrogen, PEM, small (domestic)
+      - hydrogen, PEM, large (domestic)
+      - hydrogen, SOEC, large (domestic)
+      - hydrogen, SMR, natural gas (domestic)
+      - hydrogen, SMR w CCS, natural gas (domestic)
+      - hydrogen, SMR, biomethane (domestic)
+      - hydrogen, SMR w CCS, biomethane (domestic)
+      - hydrogen, wood gasification (domestic)
+      - hydrogen, wood gasification w CCS (domestic)
+
+    replaces:
+      - name: market for hydrogen, gaseous, low pressure
+        product: hydrogen, gaseous, low pressure
+
+    replaces in:
+      - location: CH
+
+    add:
+      - name: Hydrogen
+        categories: air::non-urban air or from high stacks
+        unit: kilogram
+        amount: 0.005
+      - name: pipeline, hydrogen, low pressure distribution network
+        reference product: pipeline, for hydrogen distribution
+        unit: kilometer
+        amount: 1.14422E-06
+      - name: pipeline, hydrogen, high pressure transmission network
+        reference product: pipeline, for hydrogen transmission
+        unit: kilometer
+        amount: 2.01706E-09
+      - name: compressor assembly for transmission hydrogen pipeline
+        reference product: compressor, for hydrogen transmission
+        unit: unit
+        amount: 3.22703E-11
+      - name: geological hydrogen storage
+        reference product: hydrogen storage
+        unit: kilogram
+        amount: 0.302074305
+      - name: market for electricity, low voltage
+        reference product: electricity, low voltage
+        unit: kilowatt hour
+        amount: 1.82
+
+  - name: market for electricity, high voltage (SPS)
+    reference product: electricity, high voltage
+    unit: kilowatt hour
+    includes:
+      - hydro_run_of_river
+      - hydro (reservoir)
+      - hydro (pumped storage)
+      - nuclear (boiling water)
+      - nuclear (pressure water)
+      - oil (peak devices)
+      - oil (DH CHP)
+      - oil (industry CHP)
+      - gas (CCGT)
+      - gas (OCGT)
+      - gas (CCGT CCS)
+      - gas (CHP DH)
+      - gas (fuel cell DH)
+      - gas (CHP industry)
+      - gas (CHP CCS industry)
+      - gas (CHP fuel cell reformer)
+      - gas (CHP single family)
+      - gas (single family CHP fuel cell)
+      - gas (multi family CHP)
+      - gas (multi family CHP fuel cell)
+      - biogas (services CHP)
+      - gas (services CHP)
+      - gas (services CHP fuel cell)
+      - waste incineration, fossil (CHP)
+      - waste incineration, fossil (industrial)
+      - waste incineration, fossil (CHP, CCS)
+      - waste incineration, fossil (industrial, CCS)
+      - waste incineration, non-fossil (CHP)
+      - waste incineration, non-fossil (industrial)
+      - waste incineration, non-fossil (CHP, CCS)
+      - waste incineration, non-fossil (industrial, CCS)
+      - pv (large scale)
+      - pv (industry)
+      - pv (services)
+      - pv residential (multi family)
+      - pv residential (single family)
+      - wind
+      - geothermal
+      - hydrogen fuel cell (DH CHP)
+      - hydrogen fuel cell (industrial CHP)
+      - hydrogen fuel cell (services CHP)
+      - biomass (DH)
+      - biomass (CHP)
+      - biomass (CCS, BECCS)
+      - biomass (CCS, industrial)
+      - battery (large)
+      - battery (medium)
+      - battery (industry)
+      - battery (services)
+      - battery (single family)
+      - battery (multi family)
+      - CAES
+      - import
+
+    add:
+      - name: transmission network construction, electricity, high voltage
+        reference product: transmission network, electricity, high voltage
+        amount: 6.58e-09
+
+      - name: Dinitrogen monoxide
+        categories: air
+        unit: kilogram
+        amount: 5.0e-06
+
+      - name: Ozone
+        categories: air
+        unit: kilogram
+        amount: 4.16e-06
+
+    replaces:
+      - name: market for electricity, high voltage
+        product: electricity, high voltage
+        location: CH
+
+      - name: market group for electricity, high voltage
+        product: electricity, high voltage
+        operator: contains
+
+    replaces in:
+      - location: CH
+        operator: equals
+        excludes:
+          name: electricity import, from neighboring countries
+
+    except regions:
+      - World
+
+  - name: market for electricity, medium voltage (SPS)
+    reference product: electricity, medium voltage
+    unit: kilowatt hour
+    includes:
+      - medium_to_high
+
+    add:
+      - name: market for sulfur hexafluoride, liquid
+        reference product: sulfur hexafluoride, liquid
+        amount: 5.4e-08
+
+      - name: transmission network construction, electricity, medium voltage
+        reference product: transmission network, electricity, medium voltage
+        amount: 1.86e-08
+
+      - name: Sulfur hexafluoride
+        categories: air
+        unit: kilogram
+        amount: 5.4e-08
+
+      - name: market for electricity, high voltage (SPS)
+        reference product: electricity, high voltage
+        amount: 0.065
+
+    replaces:
+      - name: market for electricity, medium voltage
+        product: electricity, medium voltage
+        location: CH
+
+      - name: market group for electricity, medium voltage
+        product: electricity, medium voltage
+        operator: contains
+
+    replaces in:
+      - location: CH
+
+    except regions:
+      - World
+
+  - name: market for electricity, low voltage (SPS)
+    reference product: electricity, low voltage
+    unit: kilowatt hour
+    includes:
+      - low_to_medium
+
+    add:
+      - name: market for sulfur hexafluoride, liquid
+        reference product: sulfur hexafluoride, liquid
+        amount: 2.99e-09
+
+      - name: distribution network construction, electricity, low voltage
+        reference product: distribution network, electricity, low voltage
+        amount: 8.74e-08
+
+      - name: Sulfur hexafluoride
+        categories: air
+        unit: kilogram
+        amount: 2.99e-09
+
+      - name: market for electricity, medium voltage (SPS)
+        reference product: electricity, medium voltage
+        amount: 0.027
+
+    replaces:
+      - name: market for electricity, low voltage
+        product: electricity, low voltage
+        location: CH
+
+      - name: market group for electricity, low voltage
+        product: electricity, low voltage
+        operator: contains
+
+    replaces in:
+      - location: CH
+
+  - name: market for district heating (SPS)
+    reference product: heat, district or industrial, other than natural gas
+    unit: megajoule
+    includes:
+      - DH_CHP_oil
+      - DH_CHP_gas
+      - DH_CHP_renew_waste
+      - DH_CHP_renew_waste_CCS
+      - DH_CHP_fossil_waste
+      - DH_CHP_fossil_waste_CCS
+      - DH_CHP_wood
+      - DH_CHP_hydrogen
+      - DH_gas
+      - DH_nuclear
+      - DH_oil
+      - DH_wood
+      - DH_solar
+      - DH_geothermal
+      - DH_heat_pump
+
+    replaces:
+      - name: market for heat, district or industrial, other than natural gas
+        product: heat, district or industrial, other than natural gas
+        location: CH
+
+    replaces in:
+      - location: CH
+
+    except regions:
+      - World
+
+  - name: market for process heat in industry (SPS)
+    reference product: heat
+    unit: megajoule
+    includes:
+      - FE_industry_process_electric_boiler
+      - FE_industry_process_heat_pump
+      - FE_industry_process_FE_other_electric
+      - FE_industry_process_light_fuel_oil
+      - FE_industry_process_heavy_fuel_oil
+      - FE_industry_process_natural_gas
+      - FE_industry_process_biomethane
+      - FE_industry_process_coal
+      - FE_industry_process_wood
+      - FE_industry_process_pellet
+      - FE_industry_process_waste_non_renew
+      - FE_industry_process_waste_renew
+      - FE_industry_process_solar
+      - FE_industry_process_hydrogen
+
+  - name: market for space heating in industry (SPS)
+    reference product: heat
+    unit: megajoule
+    includes:
+      - FE_industry_heat_CHP_oil
+      - FE_industry_heat_CHP_gas
+      - FE_industry_heat_CHP_gas_CCS
+      - FE_industry_heat_CHP_fuel_cell
+      - FE_industry_heat_CHP_waste_non_renew
+      - FE_industry_heat_CHP_waste_non_renew_CCS
+      - FE_industry_heat_CHP_wood
+      - FE_industry_heat_CHP_wood_CCS
+      - FE_industry_heat_CHP_hydrogen
+      - FE_industry_heat_DH
+
+  - name: market for process heat and space heating in industry (SPS)
+    reference product: heat
+    unit: megajoule
+    includes:
+      - FE_industry_process_electric_boiler
+      - FE_industry_process_heat_pump
+      - FE_industry_process_FE_other_electric
+      - FE_industry_process_light_fuel_oil
+      - FE_industry_process_heavy_fuel_oil
+      - FE_industry_process_natural_gas
+      - FE_industry_process_biomethane
+      - FE_industry_process_coal
+      - FE_industry_heat_CHP_oil
+      - FE_industry_heat_CHP_gas
+      - FE_industry_heat_CHP_gas_CCS
+      - FE_industry_heat_CHP_fuel_cell
+      - FE_industry_heat_CHP_waste_non_renew
+      - FE_industry_heat_CHP_waste_non_renew_CCS
+      - FE_industry_heat_CHP_wood
+      - FE_industry_heat_CHP_wood_CCS
+      - FE_industry_heat_CHP_hydrogen
+      - FE_industry_heat_DH
+      - FE_industry_process_wood
+      - FE_industry_process_pellet
+      - FE_industry_process_waste_non_renew
+      - FE_industry_process_waste_renew
+      - FE_industry_process_solar
+      - FE_industry_process_hydrogen
+
+  - name: market for space heating in services (SPS)
+    reference product: heat
+    unit: megajoule
+    includes:
+      - FE_services_electric_boiler
+      - FE_services_heat_pump
+      - FE_services_other_electric
+      - FE_services_light_fuel_oil
+      - FE_services_natural_gas
+      - FE_services_biomethane
+      - FE_services_CHP_gas
+      - FE_services_CHP_biogas
+      - FE_services_CHP_fuel_cell
+      - FE_services_CHP_wood
+      - FE_services_CHP_hydrogen
+      - FE_services_DH
+      - FE_services_wood
+      - FE_services_pellet
+      - FE_services_solar
+      - FE_services_hydrogen
+
+  - name: market for space heating in residential (SPS)
+    reference product: heat
+    unit: megajoule
+    includes:
+      - FE_residential_space_heating_electric_boiler
+      - FE_residential_space_heating_heat_pump
+      - FE_residential_FE_other_electric
+      - FE_residential_space_heating_light_fuel_oil
+      - FE_residential_space_heating_gas
+      - FE_residential_space_heating_coal
+      - FE_residential_space_heating_wood
+      - FE_residential_space_heating_pellet
+      - FE_residential_space_heating_solar
+      - FE_residential_space_heating_hydrogen
+      - FE_residential_space_heating_CHP_gas
+      - FE_residential_space_heating_CHP_fuel_cell
+      - FE_residential_space_heating_CHP_wood
+      - FE_residential_space_heating_DH
+
+
+  - name: market for water heating in residential (SPS)
+    reference product: heat
+    unit: megajoule
+    includes:
+      - FE_residential_water_heating_light_fuel_oil
+      - FE_residential_water_heating_gas
+      - FE_residential_water_heating_coal
+      - FE_residential_water_heating_wood
+      - FE_residential_water_heating_pellet
+      - FE_residential_water_heating_solar
+      - FE_residential_water_heating_hydrogen
+
+  - name: market for space and water heating in residential (SPS)
+    reference product: heat
+    unit: megajoule
+    includes:
+      - FE_residential_space_heating_electric_boiler
+      - FE_residential_space_heating_heat_pump
+      - FE_residential_FE_other_electric
+      - FE_residential_space_heating_light_fuel_oil
+      - FE_residential_space_heating_gas
+      - FE_residential_space_heating_coal
+      - FE_residential_space_heating_wood
+      - FE_residential_space_heating_pellet
+      - FE_residential_space_heating_solar
+      - FE_residential_space_heating_hydrogen
+      - FE_residential_space_heating_CHP_gas
+      - FE_residential_space_heating_CHP_fuel_cell
+      - FE_residential_space_heating_CHP_wood
+      - FE_residential_space_heating_DH
+      - FE_residential_water_heating_light_fuel_oil
+      - FE_residential_water_heating_gas
+      - FE_residential_water_heating_coal
+      - FE_residential_water_heating_wood
+      - FE_residential_water_heating_pellet
+      - FE_residential_water_heating_solar
+      - FE_residential_water_heating_hydrogen
+
+  - name: market for energy carriers for cars (SPS)
+    reference product: heat
+    unit: megajoule
+    includes:
+      - FE_cars_electricity
+      - FE_cars_hydrogen
+      - FE_cars_gasoline
+      - FE_cars_diesel
+      - FE_cars_gas
+
+  - name: market for energy carriers for buses (SPS)
+    reference product: heat
+    unit: megajoule
+    includes:
+      - FE_bus_electricity
+      - FE_bus_hydrogen
+      - FE_bus_diesel
+      - FE_bus_gas
+
+  - name: market for energy carriers for coaches (SPS)
+    reference product: heat
+    unit: megajoule
+    includes:
+      - FE_coach_electricity
+      - FE_coach_hydrogen
+      - FE_coach_gas
+      - FE_coach_diesel
+      - FE_coach_gas
+
+  - name: market for energy carriers for motorcycles (SPS)
+    reference product: heat
+    unit: megajoule
+    includes:
+      - FE_motorcycle_electric
+      - FE_motorcycle_hydrogen
+      - FE_motorcycle_gasoline
+
+  - name: market for energy carriers for light duty trucks (SPS)
+    reference product: heat
+    unit: megajoule
+    includes:
+      - FE_light_duty_truck_electricity
+      - FE_light_duty_truck_hydrogen
+      - FE_light_duty_truck_gas
+      - FE_light_duty_truck_gasoline
+      - FE_light_duty_truck_diesel
+
+  - name: market for energy carriers for heavy duty trucks (SPS)
+    reference product: heat
+    unit: megajoule
+    includes:
+      - FE_heavy_duty_truck_electricity
+      - FE_heavy_duty_truck_hydrogen
+      - FE_heavy_duty_truck_gas
+      - FE_heavy_duty_truck_gasoline
+      - FE_heavy_duty_truck_diesel
+
+  - name: market for energy carriers for other transport (SPS)
+    reference product: heat
+    unit: megajoule
+    includes:
+      - FE_other_transport_electric
+      - FE_other_transport_hydrogen
+      - FE_other_transport_gasoline
+      - FE_other_transport_diesel
+
+  - name: market for energy carriers for transport (SPS)
+    reference product: heat
+    unit: megajoule
+    includes:
+      - FE_cars_electricity
+      - FE_cars_hydrogen
+      - FE_cars_gasoline
+      - FE_cars_diesel
+      - FE_cars_gas
+      - FE_bus_electricity
+      - FE_bus_hydrogen
+      - FE_bus_diesel
+      - FE_bus_gas
+      - FE_coach_electricity
+      - FE_coach_hydrogen
+      - FE_coach_gas
+      - FE_coach_diesel
+      - FE_coach_gas
+      - FE_motorcycle_electric
+      - FE_motorcycle_hydrogen
+      - FE_motorcycle_gasoline
+      - FE_light_duty_truck_electricity
+      - FE_light_duty_truck_hydrogen
+      - FE_light_duty_truck_gas
+      - FE_light_duty_truck_gasoline
+      - FE_light_duty_truck_diesel
+      - FE_heavy_duty_truck_electricity
+      - FE_heavy_duty_truck_hydrogen
+      - FE_heavy_duty_truck_gas
+      - FE_heavy_duty_truck_gasoline
+      - FE_heavy_duty_truck_diesel
+      - FE_other_transport_electric
+      - FE_other_transport_hydrogen
+      - FE_other_transport_gasoline
+      - FE_other_transport_diesel
+      
+
+  - name: market for final energy use (SPS)
+    reference product: energy
+    unit: megajoule
+    includes:
+      # should include all variables starting with FE_
+      - FE_industry_process_electric_boiler
+      - FE_industry_process_heat_pump
+      - FE_industry_process_FE_other_electric
+      - FE_industry_process_light_fuel_oil
+      - FE_industry_process_heavy_fuel_oil
+      - FE_industry_process_natural_gas
+      - FE_industry_process_biomethane
+      - FE_industry_process_coal
+      - FE_industry_process_wood
+      - FE_industry_process_pellet
+      - FE_industry_process_waste_non_renew
+      - FE_industry_process_waste_renew
+      - FE_industry_process_solar
+      - FE_industry_process_hydrogen
+      - FE_industry_heat_CHP_oil
+      - FE_industry_heat_CHP_gas
+      - FE_industry_heat_CHP_gas_CCS
+      - FE_industry_heat_CHP_fuel_cell
+      - FE_industry_heat_CHP_waste_non_renew
+      - FE_industry_heat_CHP_waste_non_renew_CCS
+      - FE_industry_heat_CHP_wood
+      - FE_industry_heat_CHP_wood_CCS
+      - FE_industry_heat_CHP_hydrogen
+      - FE_industry_heat_DH
+      - FE_services_electric_boiler
+      - FE_services_heat_pump
+      - FE_services_other_electric
+      - FE_services_light_fuel_oil
+      - FE_services_natural_gas
+      - FE_services_biomethane
+      - FE_services_CHP_gas
+      - FE_services_CHP_biogas
+      - FE_services_CHP_fuel_cell
+      - FE_services_CHP_wood
+      - FE_services_CHP_hydrogen
+      - FE_services_DH
+      - FE_services_wood
+      - FE_services_pellet
+      - FE_services_solar
+      - FE_services_hydrogen
+      - FE_residential_space_heating_electric_boiler
+      - FE_residential_space_heating_heat_pump
+      - FE_residential_FE_other_electric
+      - FE_residential_space_heating_light_fuel_oil
+      - FE_residential_space_heating_gas
+      - FE_residential_space_heating_coal
+      - FE_residential_space_heating_wood
+      - FE_residential_space_heating_pellet
+      - FE_residential_space_heating_solar
+      - FE_residential_space_heating_hydrogen
+      - FE_residential_space_heating_CHP_gas
+      - FE_residential_space_heating_CHP_fuel_cell
+      - FE_residential_space_heating_CHP_wood
+      - FE_residential_space_heating_DH
+      - FE_residential_water_heating_light_fuel_oil
+      - FE_residential_water_heating_gas
+      - FE_residential_water_heating_coal
+      - FE_residential_water_heating_wood
+      - FE_residential_water_heating_pellet
+      - FE_residential_water_heating_solar
+      - FE_residential_water_heating_hydrogen
+      - FE_cars_electricity
+      - FE_cars_hydrogen
+      - FE_cars_gasoline
+      - FE_cars_diesel
+      - FE_cars_gas
+      - FE_bus_electricity
+      - FE_bus_hydrogen
+      - FE_bus_diesel
+      - FE_bus_gas
+      - FE_coach_electricity
+      - FE_coach_hydrogen
+      - FE_coach_gas
+      - FE_coach_diesel
+      - FE_coach_gas
+      - FE_motorcycle_electric
+      - FE_motorcycle_hydrogen
+      - FE_motorcycle_gasoline
+      - FE_light_duty_truck_electricity
+      - FE_light_duty_truck_hydrogen
+      - FE_light_duty_truck_gas
+      - FE_light_duty_truck_gasoline
+      - FE_light_duty_truck_diesel
+      - FE_heavy_duty_truck_electricity
+      - FE_heavy_duty_truck_hydrogen
+      - FE_heavy_duty_truck_gas
+      - FE_heavy_duty_truck_gasoline
+      - FE_heavy_duty_truck_diesel
+      - FE_other_transport_electric
+      - FE_other_transport_hydrogen
+      - FE_other_transport_gasoline
+      - FE_other_transport_diesel
