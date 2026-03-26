@@ -139,6 +139,22 @@ production pathways:
       exists in original database: True
       mask: heavy water moderated
 
+  nuclear (epr):
+    production volume:
+      variable: Electricity generation|Nuclear fuel|EPR
+    ecoinvent alias:
+      name: electricity production, nuclear, Evolutionary Power Reactor (EPR)
+      reference product: electricity, high voltage
+      exists in original database: True
+
+  nuclear (smr):
+    production volume:
+      variable: Electricity generation|Nuclear fuel|SMR
+    ecoinvent alias:
+      name: electricity production, Small Modular Reactor (SMR)
+      reference product: electricity, high voltage
+      exists in original database: True
+
   gas (CCGT):
     production volume:
       variable: Electricity generation|Gas|Gas turbines combined cycle

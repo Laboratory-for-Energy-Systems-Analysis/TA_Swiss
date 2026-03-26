@@ -38,6 +38,19 @@ EXTRA_VARIABLES = [
     "Production|Electricity|Medium to high",
     "Production|Electricity|Low to medium",
 ]
+LEGACY_NUCLEAR_END_YEAR = 2040
+LEGACY_NUCLEAR_TOTAL = 33.2
+LEGACY_NUCLEAR_SPLIT = {
+    "Electricity generation|Nuclear fuel|Pressure water": 0.6,
+    "Electricity generation|Nuclear fuel|Boiling water": 0.4,
+}
+NEW_NUCLEAR_VARIANTS = {
+    "AP1": ("Electricity generation|Nuclear fuel|EPR", 2040),
+    "AP2": ("Electricity generation|Nuclear fuel|EPR", 2050),
+    "AP3": ("Electricity generation|Nuclear fuel|SMR", 2040),
+    "AP4": ("Electricity generation|Nuclear fuel|SMR", 2050),
+    "AP5": ("Electricity generation|Nuclear fuel|SMR", 2050),
+}
 
 
 def normalize_columns(columns):
@@ -138,20 +151,65 @@ def subtract_exports_from_imports(df, year_columns):
     return df
 
 
-def split_nuclear_generation(df, year_columns):
+def get_new_nuclear_variant(scenario_name):
+    for scenario_marker, variant_info in NEW_NUCLEAR_VARIANTS.items():
+        if scenario_marker in scenario_name:
+            return variant_info
+    return None, None
+
+
+def split_nuclear_generation(df, scenario_name, year_columns):
     nuclear = df.loc[df["variables"] == "Electricity generation|Nuclear Fuel"].copy()
     if nuclear.empty:
         return df
 
-    nuclear_pw = nuclear.copy()
-    nuclear_pw["variables"] = "Electricity generation|Nuclear fuel|Pressure water"
-    nuclear_pw.loc[:, year_columns] *= 0.6
+    nuclear.loc[:, year_columns] = nuclear.loc[:, year_columns].apply(
+        pd.to_numeric, errors="coerce"
+    ).fillna(0)
+    total_nuclear = nuclear.loc[:, year_columns].copy()
 
-    nuclear_bw = nuclear.copy()
-    nuclear_bw["variables"] = "Electricity generation|Nuclear fuel|Boiling water"
-    nuclear_bw.loc[:, year_columns] *= 0.4
+    legacy_nuclear = total_nuclear.copy()
+    legacy_years = [year for year in year_columns if year <= LEGACY_NUCLEAR_END_YEAR]
+    post_legacy_years = [year for year in year_columns if year > LEGACY_NUCLEAR_END_YEAR]
 
-    return pd.concat([df, nuclear_pw, nuclear_bw], ignore_index=True)
+    if LEGACY_NUCLEAR_END_YEAR in legacy_years:
+        legacy_nuclear.loc[:, LEGACY_NUCLEAR_END_YEAR] = np.minimum(
+            legacy_nuclear.loc[:, LEGACY_NUCLEAR_END_YEAR],
+            LEGACY_NUCLEAR_TOTAL,
+        )
+
+    if post_legacy_years:
+        legacy_nuclear.loc[:, post_legacy_years] = 0
+
+    split_rows = []
+    for variable, share in LEGACY_NUCLEAR_SPLIT.items():
+        split_row = nuclear.copy()
+        split_row["variables"] = variable
+        split_row.loc[:, year_columns] = legacy_nuclear.loc[:, year_columns] * share
+        split_rows.append(split_row)
+
+    new_variant, start_year = get_new_nuclear_variant(scenario_name)
+    for variable in (
+        "Electricity generation|Nuclear fuel|EPR",
+        "Electricity generation|Nuclear fuel|SMR",
+    ):
+        split_row = nuclear.copy()
+        split_row["variables"] = variable
+        split_row.loc[:, year_columns] = 0
+
+        if variable == new_variant:
+            start_years = [year for year in year_columns if year >= start_year]
+            if start_years:
+                new_nuclear = total_nuclear.loc[:, start_years].copy()
+                if start_year == LEGACY_NUCLEAR_END_YEAR and start_year in start_years:
+                    new_nuclear.loc[:, start_year] = (
+                        new_nuclear.loc[:, start_year] - LEGACY_NUCLEAR_TOTAL
+                    ).clip(lower=0)
+                split_row.loc[:, start_years] = new_nuclear
+
+        split_rows.append(split_row)
+
+    return pd.concat([df, *split_rows], ignore_index=True)
 
 
 def backfill_efficiency_rows(df, year_columns):
@@ -200,7 +258,7 @@ def format_file(path):
     for source_variable, target_variable in WASTE_MERGES:
         df = merge_variable_rows(df, source_variable, target_variable, year_columns)
 
-    df = split_nuclear_generation(df, year_columns)
+    df = split_nuclear_generation(df, scenario_name, year_columns)
     df = df.replace(["-", "- ", " ", "n.a."], np.nan).infer_objects(copy=False)
     df = backfill_efficiency_rows(df, year_columns)
     df = df.fillna(0)
