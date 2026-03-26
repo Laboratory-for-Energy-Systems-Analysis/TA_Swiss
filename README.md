@@ -1,185 +1,207 @@
-# sweet-sure-2050-switzerland ![GitHub release (latest by date)](https://img.shields.io/github/v/release/premise-community-scenarios/sweet-sure-2050-switzerland)
-
+# TA-SWISS Switzerland scenario data package
 
 Description
 -----------
 
-This is a repository containing a data package that implements the projections of the 
-TIMES model for Switzerland (STEM) within the life-cycle assessment (LCA) database ecoinvent.
-Projections are implemented for the scenarios **SPS1** and **SPS4**, developed within SFOE's SWEET-SURE program.
+This repository contains a scenario data package that implements projections from the Swiss TIMES Energy Model (**STEM**) in the life cycle assessment (LCA) database **ecoinvent**.
+The package was prepared for the **TA-SWISS** project assessing alternative nuclear strategies in Switzerland.
 
-This data package is meant to be used in `premise` in addition to a global IAM scenario, to provide 
-refined projections at the country level. `premise` can export the result as a data package for `pathways`,
-which is then be used to compute the system-wide impacts of the energy scenario produced by STEM.
+The package is designed to be used with **premise**, which combines the Swiss STEM scenarios with a global integrated assessment model pathway in order to generate scenario-specific prospective LCA databases.
+In this project, the Swiss scenarios are coupled with **REMIND SSP2-PkBudg1000** for the foreign background system, so that processes outside Switzerland evolve under a decarbonizing global economy consistent with a peak cumulative CO₂ budget of 1,000 Gt by 2100.
 
-This data package contains all the files necessary for `premise` to implement
-this scenario and create market-specific composition for electricity (including imports from
-neighboring countries), liquid and gaseous fuels (including hydrogen) and models their supply and use.
+The resulting prospective databases can be exported directly to Brightway or assembled into a data package for **pathways**, enabling time-resolved, system-level environmental assessment of final energy provision from **2020 to 2070**.
 
-Publication
------------
+This data package contains the files required by premise to:
 
-This data package is used to produce results for the following publication:
-
-**The global environmental footprint of Switzerland’s net-zero energy system uncovers impacts abroad**  
-Alvaro Jose Hahn Menacho, Romain Sacchi, Christian Bauer, Christian Moretti, Evangelos Panos, Russell McKenna and Peter Burgherr.  
-*Communications Earth & Environment 6 (1), 266. doi: https://doi.org/10.1038/s43247-025-02220-5*
-
-**The material-energy nexus in net-zero transition scenarios: exploring environmental trade-offs and uncertainties**  
-Alvaro Jose Hahn Menacho, Romain Sacchi, Christian Bauer, Evangelos Panos, Russell McKenna and Peter Burgherr.  
-*Resources, Conservation and Recycling 218, 108251. doi: https://doi.org/10.1016/j.resconrec.2025.108251*
+- read the STEM scenario trajectories,
+- map STEM variables to corresponding ecoinvent activities,
+- create Swiss market compositions for electricity, gaseous and liquid fuels, hydrogen, district heating, and final energy use,
+- and generate scenario-specific future background databases for successive model years.
 
 
-Ecoinvent database compatibility
---------------------------------
+Package contents
+----------------
 
-- ecoinvent 3.11 cut-off
-- ecoinvent 3.10 cut-off
+The package includes three main components:
+
+1. **Scenario data** (`scenario_data/scenario_data.csv`)
+   
+   Tabular STEM outputs in a standardized format with fields for model, scenario, region, variable, unit, and yearly values.
+
+2. **Configuration file** (`configuration_file/config.yaml`)
+   
+   Mapping between STEM variables and ecoinvent datasets, including production pathways, market definitions, and regionalization instructions.
+
+3. **Additional inventories** (`inventories/lci-sweet_sure.xlsx`)
+   
+   Supplementary inventories used where new or adapted datasets are needed for the Swiss scenario implementation.
+
+
+Scenario coverage
+-----------------
+
+The package contains **18 Swiss scenarios**:
+
+- SPS1
+- SPS1_AP1_MD
+- SPS1_AP2_MD
+- SPS1_AP3_MD
+- SPS1_AP4_MD
+- SPS1_AP5_MD
+- SPS2
+- SPS2_AP1_MD
+- SPS2_AP2_MD
+- SPS2_AP3_MD
+- SPS2_AP4_MD
+- SPS2_AP5_MD
+- SPS4
+- SPS4_AP1_MD
+- SPS4_AP2_MD
+- SPS4_AP3_MD
+- SPS4_AP4_MD
+- SPS4_AP5_MD
+
+The scenario file provides values for the following time steps:
+
+**2020, 2022, 2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070**.
+
+
+Ecoinvent compatibility
+-----------------------
+
+This package is configured for:
+
+- **ecoinvent 3.10, cut-off**
+
+
+What does this package cover?
+-----------------------------
+
+The mapping spans the main parts of the Swiss energy system and links STEM outputs to ecoinvent activities used by premise.
+It covers, among others:
+
+- electricity generation and imports,
+- domestic production of hydrogen, biogas, and synthetic fuels,
+- liquid and gaseous fuel imports,
+- district heating and CHP supply,
+- final energy use in residential buildings,
+- final energy use in services,
+- final energy use in industry,
+- final energy use in transport.
+
+The package also defines Swiss market datasets for energy carriers and end uses, so that consuming activities in Switzerland can be relinked to scenario-consistent energy supply mixes.
+
+To account for decarbonization outside Switzerland, the Swiss STEM scenarios are complemented by the **REMIND SSP2-PkBudg1000** pathway for foreign background systems.
+This means that imported technologies, fuels, and materials are embedded in a progressively decarbonizing global economy rather than in a static background.
+
+
+How are technologies mapped?
+----------------------------
+
+The mapping between STEM variables and ecoinvent datasets is defined in:
+
+- `configuration_file/config.yaml`
+
+This file specifies production pathways, market creation rules, and selected regionalization steps used by premise when generating future databases.
+
+
+How to use it with premise
+--------------------------
+
+The following example creates prospective ecoinvent databases for selected years by combining one Swiss STEM scenario with the REMIND **SSP2-PkBudg1000** background pathway.
+
+```python
+from premise import NewDatabase
+import bw2data
+from datapackage import Package
+
+bw2data.projects.set_current("some brightway project")
+
+swiss = Package("../datapackage.json")
+
+scenarios = [
+    {
+        "model": "remind",
+        "pathway": "SSP2-PkBudg1000",
+        "year": 2020,
+        "external scenarios": [{"scenario": "SPS1", "data": swiss}],
+    },
+    {
+        "model": "remind",
+        "pathway": "SSP2-PkBudg1000",
+        "year": 2030,
+        "external scenarios": [{"scenario": "SPS1", "data": swiss}],
+    },
+    {
+        "model": "remind",
+        "pathway": "SSP2-PkBudg1000",
+        "year": 2050,
+        "external scenarios": [{"scenario": "SPS1", "data": swiss}],
+    },
+    {
+        "model": "remind",
+        "pathway": "SSP2-PkBudg1000",
+        "year": 2070,
+        "external scenarios": [{"scenario": "SPS1", "data": swiss}],
+    },
+]
+
+ndb = NewDatabase(
+    scenarios=scenarios,
+    source_db="ecoinvent-3.10-cutoff",
+    source_version="3.10",
+    key="xxxx",
+    use_absolute_efficiency=True,
+    biosphere_name="ecoinvent-3.10-biosphere",
+)
+
+ndb.update()
+ndb.write_db_to_brightway()
+```
+
+Other Swiss scenarios can be used by replacing `SPS1` with any scenario listed in `datapackage.json`.
+
+
+How to create a Pathways data package
+-------------------------------------
+
+The same scenario package can be used to generate a **pathways** data package for time-resolved, system-level environmental assessment.
+
+```python
+from premise import PathwaysDataPackage
+from datapackage import Package
+
+swiss = Package("../datapackage.json")
+
+scenario = {
+    "model": "remind",
+    "pathway": "SSP2-PkBudg1000",
+    "external scenarios": [{"scenario": "SPS1_AP2_MD", "data": swiss}],
+}
+
+ndb = PathwaysDataPackage(
+    scenarios=[scenario],
+    years=[2020, 2022, 2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070],
+    source_db="ecoinvent-3.10-cutoff",
+    source_version="3.10",
+    key="xxxx",
+    use_absolute_efficiency=True,
+    biosphere_name="ecoinvent-3.10-biosphere",
+)
+
+ndb.create_datapackage(
+    name="ta-swiss-remind-SSP2-PkBudg1000-stem-SPS1_AP2_MD",
+    contributors=[
+        {"name": "Your name", "email": "your.email@example.org"}
+    ],
+)
+```
+
+This produces a pathways-compatible data package that can be used to calculate the environmental impacts of final energy provision over time while remaining consistent with both the Swiss scenario assumptions and the global background pathway.
 
 
 License
 -------
 
-This scenario is licensed under the Creative Commons Attribution 4.0 International Public License (CC BY 4.0).
-See the LICENSE file for more details.
-
-
-What does this do?
-------------------
-
-![map electricity markets](assets/map.png)
-
-This external scenario creates markets for Switzerland listed below, according
-to the scenarios SPS1 and SPS4 generated by the Swiss TIMES energy model STEM 
-(yellow boundaries in map above).
-
-Markets
-*******
-
-* market for biogas, domestic (SPS)
-* market for biomass, for power generation (SPS)
-* market for diesel (SPS)
-* market for district heating (SPS)
-* market for electricity, high voltage (SPS)
-* market for electricity, low voltage (SPS)
-* market for electricity, medium voltage (SPS)
-* market for energy carriers for buses (SPS)
-* market for energy carriers for cars (SPS)
-* market for energy carriers for coaches (SPS)
-* market for energy carriers for heavy duty trucks (SPS)
-* market for energy carriers for light duty trucks (SPS)
-* market for energy carriers for motorcycles (SPS)
-* market for energy carriers for other transport (SPS)
-* market for hydrogen (SPS)
-* market for methane (SPS)
-* market for petrol (SPS)
-* market for process heat and space heating in industry (SPS)
-* market for process heat in industry (SPS)
-* market for space and water heating in residential (SPS)
-* market for space heating in industry (SPS)
-* market for space heating in residential (SPS)
-* market for space heating in services (SPS)
-* market for water heating in residential (SPS)
-
-
-These markets are relinked to activities that consume final energy in Switzerland.
-
-Additionally, the Swiss markets rely to a varying extent on imports from
-neighboring countries, which is provided by the regional IAM market.
-
-
-
-How are technologies mapped?
----------------------------
-
-See the mapping file: configuration_file/config.yaml.
-
-
-How to use it?
---------------
-
-The following script generates four LCA databases for the years 2020, 2030, 2040 and 2050,
-with STEM's SPS1 scenario combined with REMIND's SSP2-NPi scenario.
-
-Other scenarios can be implemented by changing the `scenarios` list.
-List of available scenarios can be found in the `datapackage.json` file.
-
-```python
-
-    from premise import *
-    import bw2data
-    from datapackage import Package
-    bw2data.projects.set_current("some brightway project")
-    
-    
-    sps = Package("../datapackage.json")
-    scenarios = [
-        {"model": "remind", "pathway": "SSP2-NPi", "year": 2020, "external scenarios": [{"scenario": "SPS1", "data": sps}]},
-        {"model": "remind", "pathway": "SSP2-NPi", "year": 2030, "external scenarios": [{"scenario": "SPS1", "data": sps}]},
-        {"model": "remind", "pathway": "SSP2-NPi", "year": 2040, "external scenarios": [{"scenario": "SPS1", "data": sps}]},
-        {"model": "remind", "pathway": "SSP2-NPi", "year": 2050, "external scenarios": [{"scenario": "SPS1", "data": sps}]},
-    ]
-    
-    ndb = NewDatabase(
-            scenarios=scenarios,
-            source_db="ecoinvent-3.10-cutoff", # <-- name of the database in the BW2 project. Must be a string.
-            source_version="3.10", # <-- version of ecoinvent. Must be a string.
-            key="xxxx", # <-- ask the key to run premise from the developers
-            use_absolute_efficiency=True,
-            biosphere_name="ecoinvent-3.10-biosphere"
-            
-    )
-    
-    ndb.update()
-    
-    ndb.write_db_to_brightway()
-
-
-```
-
-To produce a data package for `pathways`, use the following script instead:
-
-```python
-
-    from premise import *
-    import bw2data
-    from datapackage import Package
-    bw2data.projects.set_current("some brightway project")
-    
-        
-    sps = Package("../datapackage.json")
-    scenarios=[
-        {"model": "remind", "pathway": "SSP2-NPi", "external scenarios": [{"scenario": "SPS4", "data": sps}]},
-        {"model": "remind", "pathway": "SSP2-PkBudg1150", "external scenarios": [{"scenario": "SPS4", "data": sps}]},
-        {"model": "remind", "pathway": "SSP2-PkBudg500", "external scenarios": [{"scenario": "SPS4", "data": sps}]},
-        {"model": "remind", "pathway": "SSP2-NPi", "external scenarios": [{"scenario": "SPS1", "data": sps}]},
-        {"model": "remind", "pathway": "SSP2-PkBudg1150", "external scenarios": [{"scenario": "SPS1", "data": sps}]},
-        {"model": "remind", "pathway": "SSP2-PkBudg500", "external scenarios": [{"scenario": "SPS1", "data": sps}]},
-    ]
-
-    for scenario in scenarios:
-        name=f"{scenario['model']}-{scenario['pathway']}-stem-{scenario['external scenarios'][0]['scenario']}"
-        print(name)
-        ndb = PathwaysDataPackage(
-            scenarios=[scenario,],
-            years=[2020, 2025, 2030, 2035, 2040, 2045, 2050],
-            source_db="ecoinvent-3.10-cutoff",
-            source_version="3.10",
-            key="xxxx",
-            use_absolute_efficiency=True,
-            biosphere_name="ecoinvent-3.10-biosphere"
-        )
-        
-        ndb.create_datapackage(
-            name=name,
-            contributors=[
-                {"name": "some name",
-                "email": "some email adress",}
-            ],
-        )
-    
-```
-
-This will produce six different data packages, one for each combination of REMIND's SSP2-NPi and SSP2-PkBudg1150 
-and SPS1 and SPS4 scenarios. These data packages can then be read by `pathways` to compute the system-wide impacts of 
-the energy scenario produced by STEM.
+This scenario package is licensed under the Creative Commons Attribution 4.0 International Public License (CC BY 4.0).
+See the `LICENSE` file for details.
