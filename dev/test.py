@@ -95,6 +95,15 @@ def build_parser() -> argparse.ArgumentParser:
         help="Skip export_results() if you only want init/calculate timings.",
     )
     parser.add_argument(
+        "--export-base",
+        type=Path,
+        default=None,
+        help=(
+            "Base filepath for export_results() without the .gzip suffix. "
+            "Defaults to a file under profile-results/."
+        ),
+    )
+    parser.add_argument(
         "--limit",
         type=int,
         default=40,
@@ -226,10 +235,14 @@ def main() -> int:
     if args.skip_export:
         return 0
 
-    export_filename = str(datapackage).replace(".zip", "").replace("remind", "results_remind")
+    if args.export_base is None:
+        export_base = args.profile_dir / f"{datapackage.stem}_export_profile"
+    else:
+        export_base = args.export_base
+    export_base.parent.mkdir(parents=True, exist_ok=True)
 
     def export() -> str:
-        return pathways_obj.export_results(filename=export_filename)
+        return pathways_obj.export_results(filename=str(export_base))
 
     export_path, export_time = profile_stage(
         "03_export",
