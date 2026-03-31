@@ -1,0 +1,4 @@
+USER_DATA_BASE_DIR: .pathways-user-data
+DIR_CACHED_DB: .pathways-user-data/cache
+USER_LOGS_DIR: .pathways-logs
+STATS_DIR: stats
