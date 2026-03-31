@@ -30,8 +30,7 @@ LEGACY_DATAPACKAGE = Path(
     "/Users/romain/Library/CloudStorage/OneDrive-PaulScherrerInstitut/TA_Swiss/"
     "remind-SSP2-PkBudg1000-stem-SPS1.zip"
 )
-DATAPACKAGE = LOCAL_DATAPACKAGE if LOCAL_DATAPACKAGE.exists() else LEGACY_DATAPACKAGE
-SUBSHARES = Path("pv_subshares_sensitivity.yaml")
+SUBSHARES = BASE_DIR / "pv_subshares_sensitivity.yaml"
 ELECTRICITY_IMPACTS_CACHE = Path("impact_totals_cache.csv")
 ELECTRICITY_PRODUCTION = Path("production_volumes.csv")
 SOLAR_VARIABLE = "SE - electricity - Solar PV Centralized"
@@ -44,6 +43,7 @@ METHODS = [
     "ReCiPe 2016 v1.03, endpoint (H) - total: human health - human health",
     "ReCiPe 2016 v1.03, endpoint (H) - total: ecosystem quality - ecosystem quality",
 ]
+RELICS_PREFIX = "RELICS - metals extraction - "
 IMPACT_ORDER = [
     "climate change",
     "human health",
@@ -117,6 +117,16 @@ PV_TECH_METADATA = {
         "unit": "kilowatt hour",
     },
 }
+
+
+def _resolve_default_datapackage() -> Path:
+    for candidate in (LEGACY_DATAPACKAGE, LOCAL_DATAPACKAGE):
+        if candidate.exists():
+            return candidate
+    return LEGACY_DATAPACKAGE
+
+
+DATAPACKAGE = _resolve_default_datapackage()
 
 
 def initialize_pathways(datapackage: Path = DATAPACKAGE) -> Pathways:
@@ -345,6 +355,7 @@ def run_pathways_sensitivity(
     iterations: int = 15,
     seed: int = 42,
     multiprocessing: bool = True,
+    methods: list[str] | None = None,
 ) -> tuple[Pathways, str, pd.DataFrame, pd.DataFrame]:
     p = initialize_pathways(datapackage)
     years, scenario = get_years_and_scenario(p)
@@ -353,7 +364,7 @@ def run_pathways_sensitivity(
     shares = get_share_trajectories(years, iterations, subshares=subshares, seed=seed)
 
     p.calculate(
-        methods=METHODS,
+        methods=methods or METHODS,
         scenarios=[scenario],
         regions=REGIONS,
         years=years,
@@ -813,7 +824,45 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--subshares", type=Path, default=SUBSHARES)
     parser.add_argument("--iterations", type=int, default=15)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--solver", default="direct")
+    parser.add_argument("--iterative-rtol", type=float, default=1e-8)
+    parser.add_argument("--iterative-atol", type=float, default=0.0)
+    parser.add_argument("--iterative-restart", type=int, default=50)
+    parser.add_argument("--iterative-maxiter", type=int, default=300)
+    parser.add_argument(
+        "--iterative-use-guess",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+    )
+    parser.add_argument(
+        "--aggregate-by",
+        nargs="*",
+        default=None,
+        help="Optional Pathways result dimensions to collapse before caching.",
+    )
     parser.add_argument("--multiprocessing", action="store_true")
+    parser.add_argument(
+        "--postprocess-multiprocessing",
+        action="store_true",
+        help="Parallelize the final cached-result assembly stage.",
+    )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=None,
+        help="Cap Pathways multiprocessing worker count when --multiprocessing is used.",
+    )
+    parser.add_argument(
+        "--methods-file",
+        type=Path,
+        default=None,
+        help="Optional text file with one LCIA method per line.",
+    )
+    parser.add_argument(
+        "--skip-figure",
+        action="store_true",
+        help="Run the sensitivity and export results without building the default regular-indicator figure.",
+    )
     parser.add_argument(
         "--export-base",
         type=Path,
@@ -832,8 +881,34 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def _load_methods(methods_file: Path | None) -> list[str]:
+    if methods_file is None:
+        return METHODS
+
+    with open(methods_file, encoding="utf-8") as handle:
+        methods = [line.strip() for line in handle if line.strip() and not line.startswith("#")]
+
+    if not methods:
+        raise ValueError(f"No LCIA methods found in {methods_file}.")
+
+    return methods
+
+
+def _configure_pool_workers(workers: int | None) -> None:
+    if workers is None:
+        return
+    if workers < 1:
+        raise ValueError("`--workers` must be at least 1.")
+
+    import pathways.pathways as pathways_module
+
+    pathways_module.cpu_count = lambda: workers
+
+
 def main() -> None:
     args = parse_args()
+    _configure_pool_workers(args.workers)
+    methods = _load_methods(args.methods_file)
     p = initialize_pathways(args.datapackage)
     years, scenario = get_years_and_scenario(p)
     runtime_subshares = prepare_subshares_file(
@@ -842,8 +917,6 @@ def main() -> None:
         regions=REGIONS,
     )
     production = get_production_volumes(p, scenario)
-    deterministic_electricity_impacts = load_deterministic_electricity_impacts()
-    total_electricity_production = load_total_electricity_production()
     shares = get_share_trajectories(years, args.iterations, subshares=args.subshares, seed=args.seed)
 
     if args.reuse_export:
@@ -858,7 +931,7 @@ def main() -> None:
         aggregated_results = aggregate_exported_results(export_path)
     else:
         p.calculate(
-            methods=METHODS,
+            methods=methods,
             scenarios=[scenario],
             regions=REGIONS,
             years=years,
@@ -868,23 +941,49 @@ def main() -> None:
             subshare_groups=["PV"],
             remove_uncertainty=True,
             seed=args.seed,
+            solver=args.solver,
+            iterative_rtol=args.iterative_rtol,
+            iterative_atol=args.iterative_atol,
+            iterative_restart=args.iterative_restart,
+            iterative_maxiter=args.iterative_maxiter,
+            iterative_use_guess=args.iterative_use_guess,
+            aggregate_by=args.aggregate_by,
             multiprocessing=args.multiprocessing,
+            postprocess_multiprocessing=args.postprocess_multiprocessing,
         )
         export_path = export_results(p, args.export_base)
         aggregated_results = aggregate_lca_results(p)
 
-    production_split, climate, indexed = prepare_plot_data(
-        production=production,
-        shares=shares,
-        aggregated_results=aggregated_results,
-        deterministic_electricity_impacts=deterministic_electricity_impacts,
-        total_electricity_production=total_electricity_production,
-    )
-    make_figure(production_split, climate, indexed, args.figure)
     print(f"Scenario: {scenario}")
     print(f"Runtime subshares: {runtime_subshares}")
+    print(f"LCIA methods: {len(methods)}")
+    print(f"Solver: {args.solver}")
+    if args.solver != "direct":
+        print(
+            "Iterative params: "
+            f"rtol={args.iterative_rtol}, "
+            f"atol={args.iterative_atol}, "
+            f"restart={args.iterative_restart}, "
+            f"maxiter={args.iterative_maxiter}, "
+            f"use_guess={args.iterative_use_guess}"
+        )
+    if args.aggregate_by:
+        print(f"Aggregate by: {args.aggregate_by}")
+    print(f"Postprocess multiprocessing: {args.postprocess_multiprocessing}")
     print(f"Exported results to {export_path}")
-    print(f"Saved figure to {args.figure}")
+
+    if not args.skip_figure:
+        deterministic_electricity_impacts = load_deterministic_electricity_impacts()
+        total_electricity_production = load_total_electricity_production()
+        production_split, climate, indexed = prepare_plot_data(
+            production=production,
+            shares=shares,
+            aggregated_results=aggregated_results,
+            deterministic_electricity_impacts=deterministic_electricity_impacts,
+            total_electricity_production=total_electricity_production,
+        )
+        make_figure(production_split, climate, indexed, args.figure)
+        print(f"Saved figure to {args.figure}")
 
 
 if __name__ == "__main__":

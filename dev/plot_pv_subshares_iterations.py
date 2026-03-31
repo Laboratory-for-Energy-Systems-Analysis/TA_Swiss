@@ -82,8 +82,9 @@ def make_figure(summary: pd.DataFrame, years: list[int], iterations: int, output
     color_map = dict(zip(PV_TECH_ORDER, colors, strict=True))
 
     fig, axis = plt.subplots(1, 1, figsize=(7.5, 4.6), sharex=True, sharey=True)
+    is_single_year = len(years) == 1
 
-    x_ticks = years[::2]
+    x_ticks = years if is_single_year else years[::2]
 
     region_summary = summary[summary["region"] == "Global"]
 
@@ -93,24 +94,53 @@ def make_figure(summary: pd.DataFrame, years: list[int], iterations: int, output
             .set_index("year")
             .reindex(years)
         )
+        x_values = np.asarray(years, dtype=float)
+        q05 = tech_summary["q05"].to_numpy(dtype=float)
+        median = tech_summary["median"].to_numpy(dtype=float)
+        q95 = tech_summary["q95"].to_numpy(dtype=float)
+        valid = np.isfinite(q05) & np.isfinite(median) & np.isfinite(q95)
 
-        axis.fill_between(
-            years,
-            tech_summary["q05"].to_numpy(),
-            tech_summary["q95"].to_numpy(),
-            color=color_map[technology],
-            alpha=0.22,
-        )
-        axis.plot(
-            years,
-            tech_summary["median"].to_numpy(),
-            color=color_map[technology],
-            linewidth=2.0,
-        )
+        if not np.any(valid):
+            continue
+
+        x_valid = x_values[valid]
+        q05_valid = q05[valid]
+        median_valid = median[valid]
+        q95_valid = q95[valid]
+
+        if is_single_year:
+            axis.errorbar(
+                x_valid,
+                median_valid,
+                yerr=np.vstack((median_valid - q05_valid, q95_valid - median_valid)),
+                fmt="o",
+                color=color_map[technology],
+                markersize=7,
+                linewidth=2.0,
+                capsize=4,
+                zorder=3,
+            )
+        else:
+            axis.fill_between(
+                x_valid,
+                q05_valid,
+                q95_valid,
+                color=color_map[technology],
+                alpha=0.22,
+            )
+            axis.plot(
+                x_valid,
+                median_valid,
+                color=color_map[technology],
+                linewidth=2.0,
+            )
 
     axis.set_title("Global", fontsize=12, fontweight="bold")
     axis.set_xticks(x_ticks)
-    axis.set_xlim(min(years), max(years))
+    if is_single_year:
+        axis.set_xlim(years[0] - 1, years[0] + 1)
+    else:
+        axis.set_xlim(min(years), max(years))
     axis.set_ylim(0, 1)
     axis.set_xlabel("Year")
     axis.set_ylabel("Market share")
@@ -156,6 +186,8 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    args.subshares = args.subshares.resolve()
+    args.datapackage = args.datapackage.resolve()
     p = initialize_pathways(args.datapackage)
     years, scenario = get_years_and_scenario(p)
     production = get_production_volumes(
@@ -173,6 +205,8 @@ def main() -> None:
     global_shares = build_global_shares(shares, production)
     summary = summarize_shares(global_shares)
     make_figure(summary, years, args.iterations, args.output)
+    print(f"Using subshares: {args.subshares}")
+    print(f"Using datapackage: {args.datapackage}")
     print(f"Scenario: {scenario}")
     print(f"Saved figure to {args.output}")
 
