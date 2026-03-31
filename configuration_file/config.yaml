@@ -151,7 +151,7 @@ production pathways:
     production volume:
       variable: Electricity generation|Nuclear fuel|SMR
     ecoinvent alias:
-      name: electricity production, Small Modular Reactor (SMR)
+      name: electricity production, nuclear, Small Modular Reactor (SMR)
       reference product: electricity, high voltage
       exists in original database: True
 
